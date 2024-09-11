@@ -1,0 +1,16 @@
+HabitUAU_PROD -> ambiente PROD
+HabitUAUPROD-aeczgbf9emhuesfs.eastus-01.azurewebsites.net
+
+HabitUAU_QA -> ambiente QA
+
+
+HabitUAU_DEV -> ambiente DEV
+
+git init
+git commit -m "demo do spring boot em java 17"
+git add .
+git branch -M HabitUAU_DEV
+git remote add origin https://github.com/nxtales/HabitUAU_WEB.git
+git push --set-upstream origin HabitUAU_DEV
+
+
