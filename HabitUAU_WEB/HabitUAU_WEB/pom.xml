@@ -42,9 +42,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azure.spring</groupId>
-			<artifactId>spring-cloud-azure-starter</artifactId>
+			<artifactId>spring-cloud-azure-dependencies</artifactId>
+			<version>5.16.0</version>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>azure-spring</id>
+			<url>https://packages.microsoft.com/maven/azure-spring</url>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
