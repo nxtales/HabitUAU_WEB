@@ -3,7 +3,7 @@ package com.habituau.HabitUAU_WEB.model.entity;
 import jakarta.persistence.*;
 
 @Entity
-@IdClass(DesafioInscritoId.class)
+@IdClass(DesafioInscritosId.class)
 public class DesafioInscrito {
 
     @Id
