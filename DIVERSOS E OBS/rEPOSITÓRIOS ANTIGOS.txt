@@ -1,0 +1,28 @@
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>spring-cloud-azure-dependencies</artifactId>
+			<version>5.16.0</version>
+		</dependency>
+	
+	<repositories>
+		<repository>
+			<id>azure-spring</id>
+			<url>https://packages.microsoft.com/maven/azure-spring</url>
+		</repository>
+	</repositories>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.azure.spring</groupId>
+				<artifactId>spring-cloud-azure-dependencies</artifactId>
+				<version>5.16.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	Could not transfer artifact com.azure.spring:spring-cloud-azure-dependencies:jar:5.16.0 from/to azure-spring (https://packages.microsoft.com/maven/azure-spring): status code: 403, reason phrase: Forbidden (403)
+	
+	Essas dependencias foram removidas pq o maven nao conseguia acessar elas, nao sei o pq. acabei substituindo pelo repositorio central do maven e funcionou. talvez tenhamos sim um pouco de sorte as vezes.
