@@ -8,4 +8,8 @@ public interface DesafioRepository extends JpaRepository<Desafio, Long> {
 
     // Buscar desafios por categoria ou parceiro
     List<Desafio> findByIdCategoriaOrIdParceiro(Long idCategoria, Long idParceiro);
+
+	List<Desafio> findSuggestedChallenges(Object preferencias, List<String> metas);
+
+	List<Desafio> findChallengesByClientId(Long cpf);
 }

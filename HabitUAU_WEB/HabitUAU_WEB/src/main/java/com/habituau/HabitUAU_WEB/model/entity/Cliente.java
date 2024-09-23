@@ -1,133 +1,140 @@
 package com.habituau.HabitUAU_WEB.model.entity;
 
+import java.util.Optional;
 import jakarta.persistence.*;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Cliente {
 
-    @Id
-    @Column(length = 11)
-    private String cpf;
+	@Id
+	@Column(length = 11)
+	private String cpf;
 
-    @Temporal(TemporalType.DATE)
-    private Date dataNascimento;
+	@Temporal(TemporalType.DATE)
+	private Date dataNascimento;
 
-    private String nome;
-    private String genero;
-    private String sobrenome;
-    private String cep;
-    private String cidade;
-    private String pais;
+	private String nome;
+	private String genero;
+	private String sobrenome;
+	private String cep;
+	private String cidade;
+	private String pais;
 
-    @Column(unique = true)
-    private String email;
+	@Column(unique = true)
+	private String email;
 
-    private String senha;
-    private String telefone;
+	private String senha;
+	private String telefone;
 
-    @Lob
-    private byte[] foto; // Foto do cliente
+	@Lob
+	private byte[] foto; // Foto do cliente
 
-    // Getters e Setters
-    public String getCpf() {
-        return cpf;
-    }
+	public Cliente(String email2, String password, String nome2, String sobrenome2, Date dataNascimento2,
+			String genero2, String cep2, String cidade2, String pais2, String telefone2) {
+		// TODO Auto-generated constructor stub
+	}
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+	// Getters e Setters
+	public String getCpf() {
+		return cpf;
+	}
 
-    public Date getDataNascimento() {
-        return dataNascimento;
-    }
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
-    public void setDataNascimento(Date dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public String getGenero() {
-        return genero;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
+	public String getGenero() {
+		return genero;
+	}
 
-    public String getSobrenome() {
-        return sobrenome;
-    }
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
 
-    public void setSobrenome(String sobrenome) {
-        this.sobrenome = sobrenome;
-    }
+	public String getSobrenome() {
+		return sobrenome;
+	}
 
-    public String getCep() {
-        return cep;
-    }
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
 
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
+	public String getCep() {
+		return cep;
+	}
 
-    public String getCidade() {
-        return cidade;
-    }
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+	public String getCidade() {
+		return cidade;
+	}
 
-    public String getPais() {
-        return pais;
-    }
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
 
-    public void setPais(String pais) {
-        this.pais = pais;
-    }
+	public String getPais() {
+		return pais;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setPais(String pais) {
+		this.pais = pais;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getSenha() {
-        return senha;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+	public String getSenha() {
+		return senha;
+	}
 
-    public String getTelefone() {
-        return telefone;
-    }
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
+	public String getTelefone() {
+		return telefone;
+	}
 
-    public byte[] getFoto() {
-        return foto;
-    }
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
 
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }
+	public byte[] getFoto() {
+		return foto;
+	}
+
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
+	}
 
 	@Override
 	public int hashCode() {
@@ -154,7 +161,25 @@ public class Cliente {
 				+ ", sobrenome=" + sobrenome + ", cep=" + cep + ", cidade=" + cidade + ", pais=" + pais + ", email="
 				+ email + ", senha=" + senha + ", telefone=" + telefone + ", foto=" + Arrays.toString(foto) + "]";
 	}
-    
-    
-}
 
+	public void setPreferencias(String preferencias) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setMetas(String metas) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public List<String> getMetas() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getPreferencias() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

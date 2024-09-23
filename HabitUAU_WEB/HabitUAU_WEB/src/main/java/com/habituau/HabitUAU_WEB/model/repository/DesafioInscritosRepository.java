@@ -9,4 +9,6 @@ public interface DesafioInscritosRepository extends JpaRepository<DesafioInscrit
 
     // Buscar desafios inscritos por CPF do cliente e ID do desafio
     Optional<DesafioInscrito> findByCpfClienteAndIdDesafio(String cpfCliente, Long idDesafio);
+    
+    List<DesafioInscrito> findByCpfCliente(String cpfCliente);
 }
