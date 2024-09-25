@@ -9,5 +9,5 @@ public interface UserProfileService {
 
     Cliente getProfile(Long cpf);
 
-    List<String> getUserHealthGoals(Long cpf);
+    String getUserHealthGoals(Long cpf);
 }

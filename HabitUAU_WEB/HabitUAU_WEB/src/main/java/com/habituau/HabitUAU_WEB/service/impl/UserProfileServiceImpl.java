@@ -36,7 +36,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 	}
 
 	@Override
-	public List<String> getUserHealthGoals(Long cpf) {
+	public String getUserHealthGoals(Long cpf) {
 		Cliente cliente = clienteRepository.findById(cpf.toString())
 				.orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
 		return cliente.getMetas();

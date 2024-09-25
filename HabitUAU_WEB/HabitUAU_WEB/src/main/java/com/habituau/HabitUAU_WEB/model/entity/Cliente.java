@@ -24,6 +24,8 @@ public class Cliente {
 	private String cep;
 	private String cidade;
 	private String pais;
+	private String preferencias;
+	private String metas;
 
 	@Column(unique = true)
 	private String email;
@@ -164,22 +166,22 @@ public class Cliente {
 
 	public void setPreferencias(String preferencias) {
 		// TODO Auto-generated method stub
-
+		this.preferencias = preferencias;
 	}
 
 	public void setMetas(String metas) {
 		// TODO Auto-generated method stub
-
+		this.metas = metas;
 	}
 
-	public List<String> getMetas() {
+	public String getMetas() {
 		// TODO Auto-generated method stub
-		return null;
+		return metas;
 	}
 
-	public Object getPreferencias() {
+	public String getPreferencias() {
 		// TODO Auto-generated method stub
-		return null;
+		return preferencias;
 	}
 
 }
