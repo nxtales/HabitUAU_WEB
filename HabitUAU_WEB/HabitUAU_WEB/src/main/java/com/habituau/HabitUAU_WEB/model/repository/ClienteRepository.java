@@ -11,6 +11,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, String> {
 
     //Buscar usuário por e-mail (para login e verificação de existência)
     Optional<Cliente> findByEmail(String email);
+    
+    boolean ExistsbyEmail(String email);
 
     Optional<Cliente> findByEmailAndPassword(String email, String password);
 

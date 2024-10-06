@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.habituau.HabitUAU_WEB.exceptions.RegraNegocioException;
 import com.habituau.HabitUAU_WEB.model.entity.*;
 import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
 import com.habituau.HabitUAU_WEB.service.UserService;
@@ -48,6 +49,11 @@ public class UserServiceImpl implements UserService {
     // Validação de e-mail com regex
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        boolean existe = clienteRepository.ExistsbyEmail(email);
+        	if(existe)
+        	{
+        		throw new RegraNegocioException("já existe um usuário cadastrado com este e-mail");
+        	}
         return email.matches(emailRegex);
     }
 
