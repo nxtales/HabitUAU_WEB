@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class DesafioInscritosTarefasCompletasId implements Serializable {
+    
+    private String cpfCliente; // CPF_cliente
+    private Integer idTarefa;  // ID_tarefa
+    private Integer idDesafio; // ID_Desafio
 
-    private String cpfCliente;
-    private Long idTarefa;
-    private Long idDesafio;
-
+    // Construtores
     public DesafioInscritosTarefasCompletasId() {}
 
-    public DesafioInscritosTarefasCompletasId(String cpfCliente, Long idTarefa, Long idDesafio) {
+    public DesafioInscritosTarefasCompletasId(String cpfCliente, Integer idTarefa, Integer idDesafio) {
         this.cpfCliente = cpfCliente;
         this.idTarefa = idTarefa;
         this.idDesafio = idDesafio;
@@ -26,30 +27,30 @@ public class DesafioInscritosTarefasCompletasId implements Serializable {
         this.cpfCliente = cpfCliente;
     }
 
-    public Long getIdTarefa() {
+    public Integer getIdTarefa() {
         return idTarefa;
     }
 
-    public void setIdTarefa(Long idTarefa) {
+    public void setIdTarefa(Integer idTarefa) {
         this.idTarefa = idTarefa;
     }
 
-    public Long getIdDesafio() {
+    public Integer getIdDesafio() {
         return idDesafio;
     }
 
-    public void setIdDesafio(Long idDesafio) {
+    public void setIdDesafio(Integer idDesafio) {
         this.idDesafio = idDesafio;
     }
 
-    // equals() e hashCode()
+    // Métodos equals e hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof DesafioInscritosTarefasCompletasId)) return false;
         DesafioInscritosTarefasCompletasId that = (DesafioInscritosTarefasCompletasId) o;
-        return Objects.equals(cpfCliente, that.cpfCliente) && 
-               Objects.equals(idTarefa, that.idTarefa) && 
+        return Objects.equals(cpfCliente, that.cpfCliente) &&
+               Objects.equals(idTarefa, that.idTarefa) &&
                Objects.equals(idDesafio, that.idDesafio);
     }
 
@@ -58,4 +59,3 @@ public class DesafioInscritosTarefasCompletasId implements Serializable {
         return Objects.hash(cpfCliente, idTarefa, idDesafio);
     }
 }
-

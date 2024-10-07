@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.habituau.HabitUAU_WEB.model.*;
+//import com.habituau.HabitUAU_WEB.model.*;
 import com.habituau.HabitUAU_WEB.model.entity.Cliente;
 import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
 import com.habituau.HabitUAU_WEB.service.*;

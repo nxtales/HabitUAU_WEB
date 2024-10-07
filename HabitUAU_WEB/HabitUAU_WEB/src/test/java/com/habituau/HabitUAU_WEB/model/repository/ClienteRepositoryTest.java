@@ -4,7 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,6 +47,14 @@ public class ClienteRepositoryTest {
 	            "Brasil",                 // País
 	            "+55 11 98765-4321"       // Telefone
 	        );
+	        
+	        repository.save(clienteTeste);
+	        
+			//ação/execução do teste em si
+			boolean result = repository.ExistsbyEmail("cliente@example.com");
+			
+			//verificação
+			Assertions.assertThat(result).isTrue();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,9 +62,6 @@ public class ClienteRepositoryTest {
         
         
 		
-		//ação/execução do teste em si
-		
-		
-		//verificação
+
 	}
 }

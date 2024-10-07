@@ -8,21 +8,27 @@ public class DesafioInscritoTarefaCompleta {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "cpf_cliente")
+    @JoinColumn(name = "cpf_cliente", referencedColumnName = "cpf")
     private Cliente cliente;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_tarefa")
+    @JoinColumn(name = "id_tarefa", referencedColumnName = "ID_Tarefa")
     private DesafioTarefa tarefa;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_desafio")
+    @JoinColumn(name = "id_desafio", referencedColumnName = "ID")
     private Desafio desafio;
 
     private int sumPontos;
 
+    private String cpfCliente;
+    private Long idDesafio;
+    private Long idTarefa;
+    
+   
+    
     // Getters e Setters
     public Cliente getCliente() {
         return cliente;
@@ -55,4 +61,28 @@ public class DesafioInscritoTarefaCompleta {
     public void setSumPontos(int sumPontos) {
         this.sumPontos = sumPontos;
     }
+
+	public String getCpfCliente() {
+		return cpfCliente;
+	}
+
+	public void setCpfCliente(String cpfCliente) {
+		this.cpfCliente = cpfCliente;
+	}
+
+	public Long getIdTarefa() {
+		return idTarefa;
+	}
+
+	public void setIdTarefa(Long idTarefa) {
+		this.idTarefa = idTarefa;
+	}
+
+	public Long getIdDesafio() {
+		return idDesafio;
+	}
+
+	public void setIdDesafio(Long idDesafio) {
+		this.idDesafio = idDesafio;
+	}
 }

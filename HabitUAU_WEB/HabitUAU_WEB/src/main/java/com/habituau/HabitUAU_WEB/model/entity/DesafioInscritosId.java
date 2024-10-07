@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public class DesafioInscritosId implements Serializable {
 
-    private String cpfCliente;
-    private Long idDesafio;
+    private String cpfCliente;  // Primary key of Cliente
+    private Long idDesafio;     // Primary key of Desafio
 
     public DesafioInscritosId() {}
 
@@ -15,7 +15,7 @@ public class DesafioInscritosId implements Serializable {
         this.idDesafio = idDesafio;
     }
 
-    // Getters e Setters
+    // Getters and setters
     public String getCpfCliente() {
         return cpfCliente;
     }
@@ -32,13 +32,13 @@ public class DesafioInscritosId implements Serializable {
         this.idDesafio = idDesafio;
     }
 
-    // equals() e hashCode()
+    // equals() and hashCode()
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DesafioInscritosId that = (DesafioInscritosId) o;
-        return Objects.equals(cpfCliente, that.cpfCliente) && 
+        return Objects.equals(cpfCliente, that.cpfCliente) &&
                Objects.equals(idDesafio, that.idDesafio);
     }
 
