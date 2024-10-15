@@ -13,7 +13,7 @@ public class Cliente {
 
 	@Id
 	@Column(length = 11)
-	private String cpf;
+	private String CPF_cliente;
 
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
@@ -43,11 +43,11 @@ public class Cliente {
 
 	// Getters e Setters
 	public String getCpf() {
-		return cpf;
+		return CPF_cliente;
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = cpf;
+		this.CPF_cliente = cpf;
 	}
 
 	public Date getDataNascimento() {
@@ -140,7 +140,7 @@ public class Cliente {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cpf, email, nome, senha, sobrenome, telefone);
+		return Objects.hash(CPF_cliente, email, nome, senha, sobrenome, telefone);
 	}
 
 	@Override
@@ -152,14 +152,14 @@ public class Cliente {
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		return Objects.equals(cpf, other.cpf) && Objects.equals(email, other.email) && Objects.equals(nome, other.nome)
+		return Objects.equals(CPF_cliente, other.CPF_cliente) && Objects.equals(email, other.email) && Objects.equals(nome, other.nome)
 				&& Objects.equals(senha, other.senha) && Objects.equals(sobrenome, other.sobrenome)
 				&& Objects.equals(telefone, other.telefone);
 	}
 
 	@Override
 	public String toString() {
-		return "Cliente [cpf=" + cpf + ", dataNascimento=" + dataNascimento + ", nome=" + nome + ", genero=" + genero
+		return "Cliente [cpf=" + CPF_cliente + ", dataNascimento=" + dataNascimento + ", nome=" + nome + ", genero=" + genero
 				+ ", sobrenome=" + sobrenome + ", cep=" + cep + ", cidade=" + cidade + ", pais=" + pais + ", email="
 				+ email + ", senha=" + senha + ", telefone=" + telefone + ", foto=" + Arrays.toString(foto) + "]";
 	}

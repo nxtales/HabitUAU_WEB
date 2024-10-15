@@ -6,15 +6,16 @@ import java.util.Date;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner; //JUnit é a biblioteca usada p/ os testes, isso já estava no doc do noriega
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+//import org.springframework.test.context.junit4.SpringRunner; //JUnit é a biblioteca usada p/ os testes, isso já estava no doc do noriega
 
 import com.habituau.HabitUAU_WEB.model.entity.Cliente;
 
 @SpringBootTest //carrega contexto de teste do spring boot
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class ClienteRepositoryTest {
 
 	//essa é a classe de teste de integração do ClienteRepository!

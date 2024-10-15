@@ -5,42 +5,42 @@ import java.util.Objects;
 
 public class DesafioInscritosTarefasCompletasId implements Serializable {
     
-    private String cpfCliente; // CPF_cliente
-    private Integer idTarefa;  // ID_tarefa
-    private Integer idDesafio; // ID_Desafio
+	private String cliente;  // Deve ter o mesmo nome do campo na entidade
+    private Integer tarefa;  // Mesmo nome do campo na entidade
+    private Integer desafio; // Mesmo nome do campo na entidade
 
     // Construtores
     public DesafioInscritosTarefasCompletasId() {}
 
-    public DesafioInscritosTarefasCompletasId(String cpfCliente, Integer idTarefa, Integer idDesafio) {
-        this.cpfCliente = cpfCliente;
-        this.idTarefa = idTarefa;
-        this.idDesafio = idDesafio;
+    public DesafioInscritosTarefasCompletasId(String cliente, Integer tarefa, Integer desafio) {
+        this.cliente = cliente;
+        this.tarefa = tarefa;
+        this.desafio = desafio;
     }
-
+    
     // Getters e Setters
     public String getCpfCliente() {
-        return cpfCliente;
+        return cliente;
     }
 
     public void setCpfCliente(String cpfCliente) {
-        this.cpfCliente = cpfCliente;
+        this.cliente = cpfCliente;
     }
 
     public Integer getIdTarefa() {
-        return idTarefa;
+        return tarefa;
     }
 
     public void setIdTarefa(Integer idTarefa) {
-        this.idTarefa = idTarefa;
+        this.tarefa = idTarefa;
     }
 
     public Integer getIdDesafio() {
-        return idDesafio;
+        return desafio;
     }
 
     public void setIdDesafio(Integer idDesafio) {
-        this.idDesafio = idDesafio;
+        this.desafio = idDesafio;
     }
 
     // Métodos equals e hashCode
@@ -49,13 +49,13 @@ public class DesafioInscritosTarefasCompletasId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof DesafioInscritosTarefasCompletasId)) return false;
         DesafioInscritosTarefasCompletasId that = (DesafioInscritosTarefasCompletasId) o;
-        return Objects.equals(cpfCliente, that.cpfCliente) &&
-               Objects.equals(idTarefa, that.idTarefa) &&
-               Objects.equals(idDesafio, that.idDesafio);
+        return Objects.equals(cliente, that.cliente) &&
+               Objects.equals(tarefa, that.tarefa) &&
+               Objects.equals(desafio, that.desafio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cpfCliente, idTarefa, idDesafio);
+        return Objects.hash(cliente, tarefa, desafio);
     }
 }
