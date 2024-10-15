@@ -58,10 +58,44 @@ public class ClienteRepositoryTest {
 			Assertions.assertThat(result).isTrue();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); }
 		}
         
-        
+		@Test
+		public void deveRetornarFalsoSeOEmailNaoExistir() {
+			//TODO METODO DE TESTE VAI SER VOID
+			//cenário
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	        Date dataNascimento;
+			try {
+				dataNascimento = sdf.parse("15/09/1990");
+				
+				// Criar um novo cliente
+		        Cliente clienteTeste = new Cliente(
+		            "cliente@example.com",    // Email
+		            "senhaSegura123",         // Senha
+		            "João",                   // Nome
+		            "Silva",                  // Sobrenome
+		            dataNascimento,           // Data de Nascimento
+		            "Masculino",              // Gênero
+		            "12345-678",              // CEP
+		            "São Paulo",              // Cidade
+		            "Brasil",                 // País
+		            "+55 11 98765-4321"       // Telefone
+		        );
+		        
+		        
+		        repository.delete(clienteTeste);
+		        
+				//ação/execução do teste em si
+				boolean result = repository.ExistsbyEmail("cliente@example.com");
+				
+				//verificação
+				Assertions.assertThat(result).isFalse();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 
 	}
