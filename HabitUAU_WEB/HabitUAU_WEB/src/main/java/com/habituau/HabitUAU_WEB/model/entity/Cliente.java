@@ -16,12 +16,12 @@ public class Cliente {
 	private String CPF_cliente;
 
 	@Temporal(TemporalType.DATE)
-	private Date dataNascimento;
+	private Date data_nascimento;
 
 	private String nome;
 	private String genero;
 	private String sobrenome;
-	private String cep;
+	private String CEP;
 	private String cidade;
 	private String pais;
 	private String preferencias;
@@ -51,11 +51,11 @@ public class Cliente {
 	}
 
 	public Date getDataNascimento() {
-		return dataNascimento;
+		return data_nascimento;
 	}
 
 	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
+		this.data_nascimento = dataNascimento;
 	}
 
 	public String getNome() {
@@ -83,11 +83,11 @@ public class Cliente {
 	}
 
 	public String getCep() {
-		return cep;
+		return CEP;
 	}
 
 	public void setCep(String cep) {
-		this.cep = cep;
+		this.CEP = cep;
 	}
 
 	public String getCidade() {
@@ -159,8 +159,8 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [cpf=" + CPF_cliente + ", dataNascimento=" + dataNascimento + ", nome=" + nome + ", genero=" + genero
-				+ ", sobrenome=" + sobrenome + ", cep=" + cep + ", cidade=" + cidade + ", pais=" + pais + ", email="
+		return "Cliente [cpf=" + CPF_cliente + ", dataNascimento=" + data_nascimento + ", nome=" + nome + ", genero=" + genero
+				+ ", sobrenome=" + sobrenome + ", cep=" + CEP + ", cidade=" + cidade + ", pais=" + pais + ", email="
 				+ email + ", senha=" + senha + ", telefone=" + telefone + ", foto=" + Arrays.toString(foto) + "]";
 	}
 

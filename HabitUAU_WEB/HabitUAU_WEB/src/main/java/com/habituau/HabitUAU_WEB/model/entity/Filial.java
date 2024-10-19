@@ -7,20 +7,20 @@ public class Filial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ID;
 
     private String cidade;
-    private String cep;
+    private String CEP;
     private String endereco;
     private String nome;
 
     // Getters e Setters
     public Long getId() {
-        return id;
+        return ID;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.ID = id;
     }
 
     public String getCidade() {
@@ -31,12 +31,12 @@ public class Filial {
         this.cidade = cidade;
     }
 
-    public String getCep() {
-        return cep;
+    public String getCEP() {
+        return CEP;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setCEP(String CEP) {
+        this.CEP = CEP;
     }
 
     public String getEndereco() {

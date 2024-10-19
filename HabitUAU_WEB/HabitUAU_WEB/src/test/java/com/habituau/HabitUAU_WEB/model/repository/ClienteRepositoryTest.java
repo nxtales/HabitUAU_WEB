@@ -8,13 +8,18 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 //import org.springframework.test.context.junit4.SpringRunner; //JUnit é a biblioteca usada p/ os testes, isso já estava no doc do noriega
 
 import com.habituau.HabitUAU_WEB.model.entity.Cliente;
 
-@SpringBootTest //carrega contexto de teste do spring boot
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Adicione esta linha
+@EnableJpaRepositories(basePackages = "com.habituau.HabitUAU_WEB.model.repository")
 @ExtendWith(SpringExtension.class)
 public class ClienteRepositoryTest {
 
@@ -26,6 +31,7 @@ public class ClienteRepositoryTest {
 	@Autowired
 	ClienteRepository repository;
 	
+	@Rollback
 	@Test
 	public void deveVerificarAExistenciaDeUmEmail() {
 		//TODO METODO DE TESTE VAI SER VOID
@@ -52,7 +58,7 @@ public class ClienteRepositoryTest {
 	        repository.save(clienteTeste);
 	        
 			//ação/execução do teste em si
-			boolean result = repository.ExistsbyEmail("cliente@example.com");
+			boolean result = repository.existsByEmail("cliente@example.com");
 			
 			//verificação
 			Assertions.assertThat(result).isTrue();
@@ -61,6 +67,7 @@ public class ClienteRepositoryTest {
 			e.printStackTrace(); }
 		}
         
+		@Rollback
 		@Test
 		public void deveRetornarFalsoSeOEmailNaoExistir() {
 			//TODO METODO DE TESTE VAI SER VOID
@@ -84,11 +91,12 @@ public class ClienteRepositoryTest {
 		            "+55 11 98765-4321"       // Telefone
 		        );
 		        
-		        
-		        repository.delete(clienteTeste);
+		        if(repository.existsByEmail("cliente@example.com") != false) {
+		        	repository.delete(clienteTeste);
+		        }
 		        
 				//ação/execução do teste em si
-				boolean result = repository.ExistsbyEmail("cliente@example.com");
+				boolean result = repository.existsByEmail("cliente@example.com");
 				
 				//verificação
 				Assertions.assertThat(result).isFalse();

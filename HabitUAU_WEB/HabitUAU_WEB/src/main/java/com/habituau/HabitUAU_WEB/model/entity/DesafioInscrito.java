@@ -7,36 +7,36 @@ import jakarta.persistence.*;
 public class DesafioInscrito {
 
     @Id
-    @Column(name = "cpf_cliente")
-    private String cpfCliente;  // This must match the IdClass field
+    @Column(name = "CPF_cliente")
+    private String CPF_cliente;  // This must match the IdClass field
 
     @Id
-    @Column(name = "desafio_id")
-    private Long idDesafio;  // This must match the IdClass field
+    @Column(name = "ID_Desafio")
+    private Long ID_Desafio;  // This must match the IdClass field
 
     @ManyToOne
-    @JoinColumn(name = "cpf_cliente", insertable = false, updatable = false)
+    @JoinColumn(name = "CPF_cliente", insertable = false, updatable = false)
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "desafio_id", insertable = false, updatable = false)
+    @JoinColumn(name = "ID_Desafio", insertable = false, updatable = false)
     private Desafio desafio;
 
     // Getters and setters
     public String getCpfCliente() {
-        return cpfCliente;
+        return CPF_cliente;
     }
 
     public void setCpfCliente(String cpfCliente) {
-        this.cpfCliente = cpfCliente;
+        this.CPF_cliente = cpfCliente;
     }
 
     public Long getIdDesafio() {
-        return idDesafio;
+        return ID_Desafio;
     }
 
     public void setIdDesafio(Long idDesafio) {
-        this.idDesafio = idDesafio;
+        this.ID_Desafio = idDesafio;
     }
 
     public Cliente getCliente() {

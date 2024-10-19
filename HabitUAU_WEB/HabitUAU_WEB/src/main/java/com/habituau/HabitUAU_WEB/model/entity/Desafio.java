@@ -8,17 +8,17 @@ public class Desafio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ID;
 
     @ManyToOne
-    @JoinColumn(name = "parceiro_id")
+    @JoinColumn(name = "ID_parceiro")
     private Parceiro parceiro;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "ID_categoria")
     private CategoriaDesafio categoria;
 
-    private String nome;
+    private String Nome;
 
     public Desafio(Long parceiroId, Long categoriaId, String nome2, List<DesafioTarefa> tasks) {
 		// TODO Auto-generated constructor stub
@@ -26,11 +26,11 @@ public class Desafio {
 
 	// Getters e Setters
     public Long getId() {
-        return id;
+        return ID;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.ID = id;
     }
 
     public Parceiro getParceiro() {
@@ -50,10 +50,10 @@ public class Desafio {
     }
 
     public String getNome() {
-        return nome;
+        return Nome;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.Nome = nome;
     }
 }

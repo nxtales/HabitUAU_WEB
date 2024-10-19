@@ -6,13 +6,13 @@ import jakarta.persistence.*;
 public class Admin {
 
     @Id
-    private Long re;
+    private Long RE;
 
     @Column(unique = true)
     private String email;
 
-    private String nome;
-    private String sobrenome;
+    private String Nome;
+    private String Sobrenome;
 
     @ManyToOne
     @JoinColumn(name = "filial_id")
@@ -23,11 +23,11 @@ public class Admin {
 
     // Getters e Setters
     public Long getRe() {
-        return re;
+        return RE;
     }
 
     public void setRe(Long re) {
-        this.re = re;
+        this.RE = re;
     }
 
     public String getEmail() {
@@ -39,19 +39,19 @@ public class Admin {
     }
 
     public String getNome() {
-        return nome;
+        return Nome;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.Nome = nome;
     }
 
     public String getSobrenome() {
-        return sobrenome;
+        return Sobrenome;
     }
 
     public void setSobrenome(String sobrenome) {
-        this.sobrenome = sobrenome;
+        this.Sobrenome = sobrenome;
     }
 
     public Filial getFilial() {

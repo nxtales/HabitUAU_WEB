@@ -7,40 +7,40 @@ public class Parceiro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ID;
 
     @ManyToOne
-    @JoinColumn(name = "segmento_id")
-    private Segmento segmento;
+    @JoinColumn(name = "Segmento")
+    private Segmento Segmento;
 
-    private int qtdeDesafios;
+    private int qtde_desafios;
 
     @Lob
     private byte[] foto; // Foto do parceiro
 
     // Getters e Setters
     public Long getId() {
-        return id;
+        return ID;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.ID = id;
     }
 
     public Segmento getSegmento() {
-        return segmento;
+        return Segmento;
     }
 
     public void setSegmento(Segmento segmento) {
-        this.segmento = segmento;
+        this.Segmento = segmento;
     }
 
-    public int getQtdeDesafios() {
-        return qtdeDesafios;
+    public int getqtde_desafios() {
+        return qtde_desafios;
     }
 
-    public void setQtdeDesafios(int qtdeDesafios) {
-        this.qtdeDesafios = qtdeDesafios;
+    public void setqtde_desafios(int qtde_desafios) {
+        this.qtde_desafios = qtde_desafios;
     }
 
     public byte[] getFoto() {

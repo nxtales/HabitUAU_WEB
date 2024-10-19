@@ -7,22 +7,22 @@ public class DesafioTarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idTarefa;
+    private Long ID_Tarefa;
 
     @ManyToOne
-    @JoinColumn(name = "desafio_id")
+    @JoinColumn(name = "ID_Desafio")
     private Desafio desafio;
 
-    private String nomeTarefa;
-    private int qtdePontos;
+    private String Nome_tarefa;
+    private int qtde_pontos;
 
     // Getters e Setters
-    public Long getIdTarefa() {
-        return idTarefa;
+    public Long getID_Tarefa() {
+        return ID_Tarefa;
     }
 
-    public void setIdTarefa(Long idTarefa) {
-        this.idTarefa = idTarefa;
+    public void setID_Tarefa(Long ID_Tarefa) {
+        this.ID_Tarefa = ID_Tarefa;
     }
 
     public Desafio getDesafio() {
@@ -33,19 +33,19 @@ public class DesafioTarefa {
         this.desafio = desafio;
     }
 
-    public String getNomeTarefa() {
-        return nomeTarefa;
+    public String getNome_tarefa() {
+        return Nome_tarefa;
     }
 
-    public void setNomeTarefa(String nomeTarefa) {
-        this.nomeTarefa = nomeTarefa;
+    public void setNome_tarefa(String Nome_tarefa) {
+        this.Nome_tarefa = Nome_tarefa;
     }
 
-    public int getQtdePontos() {
-        return qtdePontos;
+    public int getqtde_pontos() {
+        return qtde_pontos;
     }
 
-    public void setQtdePontos(int qtdePontos) {
-        this.qtdePontos = qtdePontos;
+    public void setqtde_pontos(int qtde_pontos) {
+        this.qtde_pontos = qtde_pontos;
     }
 }

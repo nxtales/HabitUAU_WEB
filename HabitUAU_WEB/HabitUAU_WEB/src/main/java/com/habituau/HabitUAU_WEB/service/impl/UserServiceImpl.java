@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     // Validação de e-mail com regex
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        boolean existe = clienteRepository.ExistsbyEmail(email);
+        boolean existe = clienteRepository.existsByEmail(email);
         	if(existe)
         	{
         		throw new RegraNegocioException("já existe um usuário cadastrado com este e-mail");
