@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Busca o cliente pelo e-mail e senha, lançando uma exceção se não encontrar
-        return clienteRepository.findByEmailAndPassword(email, senha)
+        return clienteRepository.findByEmailAndSenha(email, senha)
                 .orElseThrow(() -> new RuntimeException("Credenciais inválidas"));
     }
 
@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
         return cpfString.matches("\\d{11}");
     }
 
-	public boolean canEnrollInChallenge(Long cpf) {
-		List<DesafioInscrito> desafiosAtivos = clienteRepository.findActiveChallengesByClientId(cpf);
+	public boolean canEnrollInChallenge(String cpf) {
+		List<DesafioInscrito> desafiosAtivos = clienteRepository.findActiveChallengesByCPF(cpf);
 		return desafiosAtivos.size() < 3;
 	}
 

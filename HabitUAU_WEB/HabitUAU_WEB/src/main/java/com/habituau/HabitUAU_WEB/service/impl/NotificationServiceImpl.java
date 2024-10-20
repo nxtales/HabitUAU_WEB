@@ -25,7 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
             throw new IllegalArgumentException("CPF inválido");
         }
 
-        Cliente cliente = clienteRepository.findByCpf(cpf.toString())
+        Cliente cliente = clienteRepository.findByCPF(cpf.toString())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         // Lógica de envio de notificação
         System.out.println("Notificação de lembrete de desafio enviada para o usuário: " + cliente.getEmail());
@@ -55,7 +55,7 @@ public class NotificationServiceImpl implements NotificationService {
             throw new IllegalArgumentException("CPF inválido");
         }
 
-        Cliente cliente = clienteRepository.findByCpf(cpf.toString())
+        Cliente cliente = clienteRepository.findByCPF(cpf.toString())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         // Lógica de envio de notificação
         System.out.println("Notificação de progresso enviada para o usuário: " + cliente.getEmail());

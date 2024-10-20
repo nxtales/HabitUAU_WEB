@@ -32,7 +32,7 @@ public class GamificationServiceImpl implements GamificationService {
 
     @Override
     public void assignPoints(Long cpf, Long desafioId, int pontos) {
-        Cliente cliente = clienteRepository.findByCpf(cpf.toString())
+        Cliente cliente = clienteRepository.findByCPF(cpf.toString())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         Desafio desafio = desafioRepository.findById(desafioId)
@@ -48,7 +48,7 @@ public class GamificationServiceImpl implements GamificationService {
 
     @Override
     public int getUserPoints(Long cpf) {
-        Cliente cliente = clienteRepository.findByCpf(cpf.toString())
+        Cliente cliente = clienteRepository.findByCPF(cpf.toString())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         return tarefasCompletasRepository.findAllByCliente(cliente)

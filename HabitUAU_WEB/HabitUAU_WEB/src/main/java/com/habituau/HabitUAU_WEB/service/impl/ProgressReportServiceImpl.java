@@ -35,7 +35,7 @@ public class ProgressReportServiceImpl implements ProgressReportService {
 			throw new IllegalArgumentException("CPF inválido");
 		}
 
-		Cliente cliente = clienteRepository.findByCpf(cpf.toString())
+		Cliente cliente = clienteRepository.findByCPF(cpf.toString())
 				.orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 		List<DesafioInscritoTarefaCompleta> tarefascompletas = desafiotarefascompletasrepository
 				.findAllByCliente(cliente);
@@ -81,7 +81,7 @@ public class ProgressReportServiceImpl implements ProgressReportService {
 
 		Cliente cliente = clienteRepository.findById(cpf.toString())
 				.orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-		List<DesafioInscrito> desafios = desafioInscritosRepository.findByCpfCliente(cpf.toString());
+		List<DesafioInscrito> desafios = desafioInscritosRepository.findByClienteCPF(cpf.toString());
 
 		// Gerar relatório com base nos desafios completados
 		ProgressReport report = new ProgressReport();

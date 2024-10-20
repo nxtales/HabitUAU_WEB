@@ -13,7 +13,7 @@ public class Cliente {
 
 	@Id
 	@Column(length = 11)
-	private String CPF_cliente;
+	private String CPF;
 
 	@Temporal(TemporalType.DATE)
 	private Date data_nascimento;
@@ -36,18 +36,41 @@ public class Cliente {
 	@Lob
 	private byte[] foto; // Foto do cliente
 
-	public Cliente(String email2, String password, String nome2, String sobrenome2, Date dataNascimento2,
+	private String CPF_cliente;
+	
+	/*public Cliente(String email2, String password, String nome2, String sobrenome2, Date dataNascimento2,
 			String genero2, String cep2, String cidade2, String pais2, String telefone2) {
 		// TODO Auto-generated constructor stub
+	}*/
+
+	 // Construtor padrão
+    public Cliente() {
+        // Construtor vazio para o Hibernate
+    }
+	
+	public Cliente(String CPF, String email, String senha, String nome, String sobrenome, Date data_nascimento,
+			String genero, String CEP, String cidade, String pais, String telefone) {
+		this.CPF = CPF;
+		this.email = email;
+		this.senha = senha;
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.data_nascimento = data_nascimento;
+		this.genero = genero;
+		this.CEP = CEP;
+		this.cidade = cidade;
+		this.pais = pais;
+		this.telefone = telefone;
+		this.CPF_cliente = CPF;
 	}
 
 	// Getters e Setters
 	public String getCpf() {
-		return CPF_cliente;
+		return CPF;
 	}
 
 	public void setCpf(String cpf) {
-		this.CPF_cliente = cpf;
+		this.CPF = cpf;
 	}
 
 	public Date getDataNascimento() {
@@ -140,7 +163,7 @@ public class Cliente {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(CPF_cliente, email, nome, senha, sobrenome, telefone);
+		return Objects.hash(CPF, email, nome, senha, sobrenome, telefone);
 	}
 
 	@Override
@@ -152,16 +175,17 @@ public class Cliente {
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		return Objects.equals(CPF_cliente, other.CPF_cliente) && Objects.equals(email, other.email) && Objects.equals(nome, other.nome)
-				&& Objects.equals(senha, other.senha) && Objects.equals(sobrenome, other.sobrenome)
-				&& Objects.equals(telefone, other.telefone);
+		return Objects.equals(CPF, other.CPF) && Objects.equals(email, other.email)
+				&& Objects.equals(nome, other.nome) && Objects.equals(senha, other.senha)
+				&& Objects.equals(sobrenome, other.sobrenome) && Objects.equals(telefone, other.telefone);
 	}
 
 	@Override
 	public String toString() {
-		return "Cliente [cpf=" + CPF_cliente + ", dataNascimento=" + data_nascimento + ", nome=" + nome + ", genero=" + genero
-				+ ", sobrenome=" + sobrenome + ", cep=" + CEP + ", cidade=" + cidade + ", pais=" + pais + ", email="
-				+ email + ", senha=" + senha + ", telefone=" + telefone + ", foto=" + Arrays.toString(foto) + "]";
+		return "Cliente [cpf=" + CPF + ", dataNascimento=" + data_nascimento + ", nome=" + nome + ", genero="
+				+ genero + ", sobrenome=" + sobrenome + ", cep=" + CEP + ", cidade=" + cidade + ", pais=" + pais
+				+ ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", foto=" + Arrays.toString(foto)
+				+ "]";
 	}
 
 	public void setPreferencias(String preferencias) {

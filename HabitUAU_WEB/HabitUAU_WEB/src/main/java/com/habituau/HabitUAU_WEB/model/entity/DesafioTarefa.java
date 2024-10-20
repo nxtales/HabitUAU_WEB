@@ -7,7 +7,7 @@ public class DesafioTarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID_Tarefa;
+    private Long ID;
 
     @ManyToOne
     @JoinColumn(name = "ID_Desafio")
@@ -17,12 +17,12 @@ public class DesafioTarefa {
     private int qtde_pontos;
 
     // Getters e Setters
-    public Long getID_Tarefa() {
-        return ID_Tarefa;
+    public Long getID() {
+        return ID;
     }
 
-    public void setID_Tarefa(Long ID_Tarefa) {
-        this.ID_Tarefa = ID_Tarefa;
+    public void setID(Long ID) {
+        this.ID = ID;
     }
 
     public Desafio getDesafio() {

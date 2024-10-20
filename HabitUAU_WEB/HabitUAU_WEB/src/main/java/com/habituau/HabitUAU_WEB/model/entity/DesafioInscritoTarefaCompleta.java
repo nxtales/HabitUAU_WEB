@@ -8,17 +8,17 @@ public class DesafioInscritoTarefaCompleta {
 
 	 @Id
 	    @ManyToOne
-	    @JoinColumn(name = "cpf_cliente", referencedColumnName = "CPF_cliente")
+	    @JoinColumn(name = "CPF_cliente", referencedColumnName = "CPF")
 	    private Cliente cliente;
 
 	    @Id
 	    @ManyToOne
-	    @JoinColumn(name = "id_tarefa", referencedColumnName = "ID_tarefa")
+	    @JoinColumn(name = "ID_tarefa", referencedColumnName = "ID")
 	    private DesafioTarefa tarefa;
 
 	    @Id
 	    @ManyToOne
-	    @JoinColumn(name = "id_desafio", referencedColumnName = "ID_desafio")
+	    @JoinColumn(name = "ID_desafio", referencedColumnName = "ID")
 	    private Desafio desafio;
 
 	    private int sumPontos;

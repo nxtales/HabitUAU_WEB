@@ -32,19 +32,19 @@ public class ChallengeExplorationServiceImpl implements ChallengeService {
 	}
 
 	@Override
-	public List<Desafio> suggestChallengesForUser(Long cpf) {
+	public List<Desafio> suggestChallengesForUser(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Desafio> getUserChallenges(Long cpf) {
+	public List<Desafio> getUserChallenges(String cpf) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean canUserEnrollInMoreChallenges(Long cpf) {
+	public boolean canUserEnrollInMoreChallenges(String cpf) {
 		// TODO Auto-generated method stub
 		return false;
 	}

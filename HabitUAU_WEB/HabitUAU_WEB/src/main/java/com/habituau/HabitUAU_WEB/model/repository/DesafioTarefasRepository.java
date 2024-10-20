@@ -7,5 +7,5 @@ import java.util.List;
 public interface DesafioTarefasRepository extends JpaRepository<DesafioTarefa, Long> {
 
     // Buscar tarefas por ID de desafio
-    List<DesafioTarefa> findByIdDesafio(Long idDesafio);
+    List<DesafioTarefa> findByDesafioID(Long idDesafio);
 }

@@ -19,7 +19,7 @@ import com.habituau.HabitUAU_WEB.model.entity.Cliente;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Adicione esta linha
-@EnableJpaRepositories(basePackages = "com.habituau.HabitUAU_WEB.model.repository")
+//@EnableJpaRepositories(basePackages = "com.habituau.HabitUAU_WEB.model.repository")
 @ExtendWith(SpringExtension.class)
 public class ClienteRepositoryTest {
 
@@ -43,6 +43,7 @@ public class ClienteRepositoryTest {
 			
 			// Criar um novo cliente
 	        Cliente clienteTeste = new Cliente(
+	        	"12345678900",           // CPF
 	            "cliente@example.com",    // Email
 	            "senhaSegura123",         // Senha
 	            "João",                   // Nome
@@ -79,6 +80,7 @@ public class ClienteRepositoryTest {
 				
 				// Criar um novo cliente
 		        Cliente clienteTeste = new Cliente(
+		        	"12345678900",           // CPF
 		            "cliente@example.com",    // Email
 		            "senhaSegura123",         // Senha
 		            "João",                   // Nome

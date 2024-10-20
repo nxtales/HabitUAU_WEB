@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface DesafioInscritosRepository extends JpaRepository<DesafioInscrito, DesafioInscritosId> {
 
     // Buscar desafios inscritos por CPF do cliente e ID do desafio
-    Optional<DesafioInscrito> findByCpfClienteAndIdDesafio(String cpfCliente, Long idDesafio);
+    Optional<DesafioInscrito> findByClienteCPFAndDesafioID(String cpfCliente, Long idDesafio);
     
-    List<DesafioInscrito> findByCpfCliente(String cpfCliente);
+    List<DesafioInscrito> findByClienteCPF(String cpfCliente);
 }

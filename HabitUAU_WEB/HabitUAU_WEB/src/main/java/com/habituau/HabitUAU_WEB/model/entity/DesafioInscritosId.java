@@ -5,23 +5,23 @@ import java.util.Objects;
 
 public class DesafioInscritosId implements Serializable {
 
-    private String cpf_cliente;  // Primary key of Cliente
+    private String CPF_cliente;  // Primary key of Cliente
     private Long ID_Desafio;     // Primary key of Desafio
 
     public DesafioInscritosId() {}
 
-    public DesafioInscritosId(String cpf_cliente, Long ID_Desafio) {
-        this.cpf_cliente = cpf_cliente;
+    public DesafioInscritosId(String CPF_cliente, Long ID_Desafio) {
+        this.CPF_cliente = CPF_cliente;
         this.ID_Desafio = ID_Desafio;
     }
 
     // Getters and setters
-    public String getcpf_cliente() {
-        return cpf_cliente;
+    public String getCPF_cliente() {
+        return CPF_cliente;
     }
 
-    public void setcpf_cliente(String cpf_cliente) {
-        this.cpf_cliente = cpf_cliente;
+    public void setCPF_cliente(String CPF_cliente) {
+        this.CPF_cliente = CPF_cliente;
     }
 
     public Long getID_Desafio() {
@@ -38,12 +38,12 @@ public class DesafioInscritosId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DesafioInscritosId that = (DesafioInscritosId) o;
-        return Objects.equals(cpf_cliente, that.cpf_cliente) &&
+        return Objects.equals(CPF_cliente, that.CPF_cliente) &&
                Objects.equals(ID_Desafio, that.ID_Desafio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cpf_cliente, ID_Desafio);
+        return Objects.hash(CPF_cliente, ID_Desafio);
     }
 }

@@ -9,12 +9,12 @@ public class Amizade {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "ID_CLI1")
+    @JoinColumn(name = "IDCLI1")
     private Cliente cliente1;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "ID_CLI2")
+    @JoinColumn(name = "IDCLI2")
     private Cliente cliente2;
 
     @Temporal(TemporalType.DATE)

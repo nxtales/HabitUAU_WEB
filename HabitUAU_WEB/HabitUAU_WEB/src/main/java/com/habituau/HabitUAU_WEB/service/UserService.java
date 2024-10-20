@@ -14,7 +14,7 @@ public interface UserService {
 
     void updateUserProfile(Long cpf, String nome, String sobrenome, String genero, String cidade, String pais, String telefone);
 
-    boolean canEnrollInChallenge(Long cpf);
+    boolean canEnrollInChallenge(String cpf);
 
 	void registerUser(Cliente cliente);
 
