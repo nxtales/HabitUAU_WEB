@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.habituau.HabitUAU_WEB.exceptions.ErroAutenticacao;
 import com.habituau.HabitUAU_WEB.exceptions.RegraNegocioException;
 import com.habituau.HabitUAU_WEB.model.entity.*;
 import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
@@ -23,8 +25,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void registerUser(Cliente cliente) {
-        if (!isValidEmail(cliente.getEmail())) {
+        if (!isValidEmailForRegistering(cliente.getEmail())) {
             throw new IllegalArgumentException("Formato de e-mail inválido");
         }
         if (!isValidCPF(Long.parseLong(cliente.getCpf()))) {
@@ -43,11 +46,16 @@ public class UserServiceImpl implements UserService {
 
         // Busca o cliente pelo e-mail e senha, lançando uma exceção se não encontrar
         return clienteRepository.findByEmailAndSenha(email, senha)
-                .orElseThrow(() -> new RuntimeException("Credenciais inválidas"));
+                .orElseThrow(() -> new ErroAutenticacao("Credenciais inválidas"));
     }
 
     // Validação de e-mail com regex
     public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        return email.matches(emailRegex);
+    }
+    
+    public boolean isValidEmailForRegistering(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         boolean existe = clienteRepository.existsByEmail(email);
         	if(existe)

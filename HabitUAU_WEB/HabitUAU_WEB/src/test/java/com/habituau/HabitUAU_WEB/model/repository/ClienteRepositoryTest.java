@@ -3,6 +3,7 @@ package com.habituau.HabitUAU_WEB.model.repository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -106,7 +107,111 @@ public class ClienteRepositoryTest {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-
 	}
+		
+		@Test
+		public void devePersistirUmUsuarioNaBaseDeDados() {
+			//cenário
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	        Date dataNascimento;
+			try {
+				dataNascimento = sdf.parse("15/09/1990");
+				
+				// Criar um novo cliente
+		        Cliente clienteTeste = new Cliente(
+		        	"12345678900",           // CPF
+		            "cliente@example.com",    // Email
+		            "senhaSegura123",         // Senha
+		            "João",                   // Nome
+		            "Silva",                  // Sobrenome
+		            dataNascimento,           // Data de Nascimento
+		            "Masculino",              // Gênero
+		            "12345-678",              // CEP
+		            "São Paulo",              // Cidade
+		            "Brasil",                 // País
+		            "+55 11 98765-4321"       // Telefone
+		        );
+		        
+		        //acao 
+		        Cliente clientesalvo = repository.save(clienteTeste);
+				
+				//verificação
+				Assertions.assertThat(clientesalvo.getCpf()).isNotNull();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		@Test
+		public void deveBuscarUmUsuarioPorEmail() {
+			//cenário
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	        Date dataNascimento;
+			try {
+				dataNascimento = sdf.parse("15/09/1990");
+				
+				// Criar um novo cliente
+		        Cliente clienteTeste = new Cliente(
+		        	"12345678900",           // CPF
+		            "cliente@example.com",    // Email
+		            "senhaSegura123",         // Senha
+		            "João",                   // Nome
+		            "Silva",                  // Sobrenome
+		            dataNascimento,           // Data de Nascimento
+		            "Masculino",              // Gênero
+		            "12345-678",              // CEP
+		            "São Paulo",              // Cidade
+		            "Brasil",                 // País
+		            "+55 11 98765-4321"       // Telefone
+		        );
+		        
+		        //acao 
+		        Cliente clientesalvo = repository.save(clienteTeste);
+				
+				//verificação
+				Optional<Cliente> result = repository.findByEmailAndSenha("cliente@example.com", "senhaSegura123");
+				Assertions.assertThat(result.isPresent());
+		        
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		@Test
+		public void deveRetornarVazioAoBuscarUmUsuarioPorEmailQuandoNaoiExistirNaBase() {
+			//cenário
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	        Date dataNascimento;
+			try {
+				dataNascimento = sdf.parse("15/09/1990");
+				
+				// Criar um novo cliente
+		        Cliente clienteTeste = new Cliente(
+		        	"12345678900",           // CPF
+		            "cliente@example.com",    // Email
+		            "senhaSegura123",         // Senha
+		            "João",                   // Nome
+		            "Silva",                  // Sobrenome
+		            dataNascimento,           // Data de Nascimento
+		            "Masculino",              // Gênero
+		            "12345-678",              // CEP
+		            "São Paulo",              // Cidade
+		            "Brasil",                 // País
+		            "+55 11 98765-4321"       // Telefone
+		        );
+		        
+		        //acao 
+		        Cliente clientesalvo = repository.save(clienteTeste);
+				
+				//verificação
+				Optional<Cliente> result = repository.findByEmailAndSenha("natalia@natalianatalia.com", "senhaSegura123");
+				Assertions.assertThat(result.isPresent()).isFalse();
+		        
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 }
