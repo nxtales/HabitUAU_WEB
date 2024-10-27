@@ -12,10 +12,14 @@ public interface UserService {
 
     Optional<Cliente> findByEmail(String email);
 
-    void updateUserProfile(Long cpf, String nome, String sobrenome, String genero, String cidade, String pais, String telefone);
+    void updateUserProfile(Long cpf, String nome, String sobrenome, String genero, String cidade, String pais, String telefone, String senha);
 
     boolean canEnrollInChallenge(String cpf);
 
 	void registerUser(Cliente cliente);
+	
+	void deleteUserByCPF(Long cpf);
+
+	Optional<Cliente> findByCPF(Long cpf);
 
 }
