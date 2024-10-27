@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy JAR app to Azure Web App - habituau-dev
 
 on:
@@ -16,6 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: List files
+        run: ls -R  # List all files to help with debugging
+
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
@@ -23,13 +23,15 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        run: mvn clean install
+        run: |
+          cd HabitUAU_WEB/HabitUAU_WEB  # Mude para o diretório correto
+          mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: '${{ github.workspace }}/HabitUAU_WEB/HabitUAU_WEB/target/*.jar'
 
   deploy:
     runs-on: windows-latest
@@ -60,4 +62,3 @@ jobs:
           app-name: 'habituau-dev'
           slot-name: 'Production'
           package: '*.jar'
-          
