@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.habituau.HabitUAU_WEB.model.entity.Cliente;
 import com.habituau.HabitUAU_WEB.model.entity.Desafio;
@@ -61,4 +62,30 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<DesafioInscrito> desafiosAtivos = clienteRepository.findActiveChallengesByCPF(cpf);
         return desafiosAtivos.size() < 3;
     }
+
+    @Transactional
+	@Override
+	public Desafio salvarDesafio(Desafio desafio) {
+		return desafioRepository.save(desafio);
+	}
+
+	@Override
+	public Desafio atualizarDesafio(Desafio desafio) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deletar(Desafio desafio) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void atualizarStatus(Desafio desafio) {
+		// TODO Auto-generated method stub
+		
+	}
+    
+    
 }

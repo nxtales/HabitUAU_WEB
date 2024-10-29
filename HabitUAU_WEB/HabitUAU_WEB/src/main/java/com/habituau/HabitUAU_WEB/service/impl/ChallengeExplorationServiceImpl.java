@@ -49,6 +49,30 @@ public class ChallengeExplorationServiceImpl implements ChallengeService {
 		return false;
 	}
 
+	@Override
+	public Desafio salvarDesafio(Desafio desafio) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Desafio atualizarDesafio(Desafio desafio) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deletar(Desafio desafio) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void atualizarStatus(Desafio desafio) {
+		// TODO Auto-generated method stub
+		
+	}
+
     /*@Override
     public List<CupomDesconto> viewChallengeRewards(Long desafioId) {
         Desafio desafio = desafioRepository.findById(desafioId)
