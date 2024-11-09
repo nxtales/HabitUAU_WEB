@@ -1,6 +1,9 @@
 package com.habituau.HabitUAU_WEB.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +15,9 @@ import com.habituau.HabitUAU_WEB.model.entity.DesafioInscrito;
 import com.habituau.HabitUAU_WEB.model.entity.DesafioTarefa;
 import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosRepository;
+import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosTarefasCompletasRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioRepository;
+import com.habituau.HabitUAU_WEB.model.repository.DesafioTarefasRepository;
 import com.habituau.HabitUAU_WEB.service.ChallengeService;
 
 @Service
@@ -21,12 +26,17 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final DesafioRepository desafioRepository;
     private final ClienteRepository clienteRepository;
     private final DesafioInscritosRepository inscritosrepository;
+    private final DesafioTarefasRepository tarefasrepository;
+    private final DesafioInscritosTarefasCompletasRepository tarefascompletasrepository;
+    
 
     @Autowired
-    public ChallengeServiceImpl(DesafioRepository desafioRepository, ClienteRepository clienteRepository, DesafioInscritosRepository inscritosrepository) {
+    public ChallengeServiceImpl(DesafioInscritosTarefasCompletasRepository tarefascompletasrepository, DesafioTarefasRepository tarefasrepository, DesafioRepository desafioRepository, ClienteRepository clienteRepository, DesafioInscritosRepository inscritosrepository) {
         this.desafioRepository = desafioRepository;
         this.clienteRepository = clienteRepository;
         this.inscritosrepository = inscritosrepository;
+		this.tarefasrepository = tarefasrepository;
+		this.tarefascompletasrepository = tarefascompletasrepository;
     }
 
     @Override
@@ -86,6 +96,46 @@ public class ChallengeServiceImpl implements ChallengeService {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	 public List<Map<String, Object>> getUserChallengeTasks(String cpf) {
+	        // Busca todos os desafios inscritos pelo CPF do cliente
+	        List<DesafioInscrito> desafiosInscritos = inscritosrepository.findByClienteCPF(cpf);
+	        
+	        // Extrai os IDs dos desafios dos desafios inscritos
+	        List<Long> desafioIds = desafiosInscritos.stream()
+	                .map(DesafioInscrito::getIdDesafio)
+	                .toList();
+
+	        // Busca os desafios correspondentes
+	        List<Desafio> desafios = desafioIds.isEmpty() ? List.of() : desafioRepository.findAllById(desafioIds);
+	        
+	        // Lista para armazenar os resultados
+	        List<Map<String, Object>> result = new ArrayList<>();
+
+	        // Para cada desafio, busca as tarefas e o status
+	        for (Desafio desafio : desafios) {
+	            Map<String, Object> desafioMap = new HashMap<>();
+	            desafioMap.put("desafio", desafio);
+	            List<Map<String, Object>> tasks = new ArrayList<>();
+
+	            List<DesafioTarefa> tarefas = tarefasrepository.findByDesafioID(desafio.getId());
+	            for (DesafioTarefa tarefa : tarefas) {
+	                boolean isCompleted = !(tarefascompletasrepository.findByClienteCPFAndTarefaID(cpf, tarefa.getID()).isEmpty());
+	                
+	                Map<String, Object> taskMap = new HashMap<>();
+	                taskMap.put("taskId", tarefa.getID());
+	                taskMap.put("taskName", tarefa.getNome_tarefa());
+	                taskMap.put("completed", isCompleted);
+	                
+	                tasks.add(taskMap);
+	            }
+
+	            desafioMap.put("tasks", tasks);
+	            result.add(desafioMap);
+	        }
+
+	        return result;
+	    }
     
     
 }

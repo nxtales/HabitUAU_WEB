@@ -11,6 +11,8 @@ public interface DesafioInscritosTarefasCompletasRepository extends JpaRepositor
     // Buscar tarefas completas por CPF do cliente, ID da tarefa e ID do desafio
     Optional<DesafioInscritoTarefaCompleta> findByClienteCPFAndTarefaIDAndDesafioID(String cpfCliente, Long idTarefa, Long idDesafio);
     
+    Optional<DesafioInscritoTarefaCompleta> findByClienteCPFAndTarefaID(String cpfCliente, Long idTarefa);
+    
     List<DesafioInscritoTarefaCompleta> findAllByCliente(Cliente cliente);
     
     Optional<DesafioInscritoTarefaCompleta> findAllByDesafio(Desafio desafio);
