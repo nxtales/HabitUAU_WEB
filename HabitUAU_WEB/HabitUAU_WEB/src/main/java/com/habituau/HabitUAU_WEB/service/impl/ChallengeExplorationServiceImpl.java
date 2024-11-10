@@ -1,6 +1,7 @@
 package com.habituau.HabitUAU_WEB.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,18 @@ public class ChallengeExplorationServiceImpl implements ChallengeService {
 
 	@Override
 	public void atualizarStatus(Desafio desafio) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> getUserChallengeTasks(String cpf) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void enrollUserInChallenge(String cpf, Long desafioId) {
 		// TODO Auto-generated method stub
 		
 	}

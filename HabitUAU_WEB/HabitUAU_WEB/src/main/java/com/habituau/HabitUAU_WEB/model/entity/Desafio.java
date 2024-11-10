@@ -1,6 +1,8 @@
 package com.habituau.HabitUAU_WEB.model.entity;
 import java.util.List;
 
+import com.habituau.HabitUAU_WEB.api.dto.TarefaDTO;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,10 +22,14 @@ public class Desafio {
 
     private String Nome;
 
+    public Desafio(Long ID, Long parceiroId, Long categoriaId, String nome2, List<DesafioTarefa> tasks) {
+		// TODO Auto-generated constructor stub
+	}
+    
     public Desafio(Long parceiroId, Long categoriaId, String nome2, List<DesafioTarefa> tasks) {
 		// TODO Auto-generated constructor stub
 	}
-
+    
 	// Getters e Setters
     public Long getId() {
         return ID;

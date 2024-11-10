@@ -1,7 +1,9 @@
 package com.habituau.HabitUAU_WEB.service;
 import java.util.List;
+import java.util.Map;
 
 import com.habituau.HabitUAU_WEB.model.entity.*;
+
 
 public interface ChallengeService {
 
@@ -22,4 +24,8 @@ public interface ChallengeService {
 	void deletar(Desafio desafio);
 	
 	void atualizarStatus(Desafio desafio);
+	
+	public List<Map<String, Object>> getUserChallengeTasks(String cpf);
+
+	void enrollUserInChallenge(String cpf, Long desafioId);
 }

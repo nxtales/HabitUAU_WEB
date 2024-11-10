@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import com.habituau.HabitUAU_WEB.model.repository.DesafioTarefasRepository;
 import com.habituau.HabitUAU_WEB.service.ChallengeService;
 
 @Service
+@Primary
 public class ChallengeServiceImpl implements ChallengeService {
 
     private final DesafioRepository desafioRepository;
@@ -39,6 +41,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 		this.tarefascompletasrepository = tarefascompletasrepository;
     }
 
+    @Transactional
     @Override
     public Desafio createChallenge(Long parceiroId, Long categoriaId, String nome, List<DesafioTarefa> tasks) {
         Desafio desafio = new Desafio(parceiroId, categoriaId, nome, tasks);
@@ -136,6 +139,31 @@ public class ChallengeServiceImpl implements ChallengeService {
 
 	        return result;
 	    }
+	 
+	 @Override
+	 @Transactional
+	 public void enrollUserInChallenge(String cpf, Long desafioId) {
+	     // 1. Verifica se o usuário existe
+	     Cliente cliente = clienteRepository.findByCPF(cpf)
+	             .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o CPF: " + cpf));
+	     
+	     // 2. Verifica se o desafio existe
+	     Desafio desafio = desafioRepository.findById(desafioId)
+	             .orElseThrow(() -> new RuntimeException("Desafio não encontrado com o ID: " + desafioId));
+	     
+	     // 3. Verifica se o usuário já está inscrito no desafio
+	     boolean alreadyEnrolled = inscritosrepository.findByClienteCPFAndDesafioID(cliente.getCpf(), desafio.getId()).isPresent();
+	     if (alreadyEnrolled) {
+	         throw new RuntimeException("Usuário já está inscrito neste desafio.");
+	     }
+
+	     // 4. Cria e salva a nova inscrição
+	     DesafioInscrito inscricao = new DesafioInscrito();
+	     inscricao.setCliente(cliente);
+	     inscricao.setDesafio(desafio);
+	     inscritosrepository.save(inscricao);
+	 }
+
     
     
 }

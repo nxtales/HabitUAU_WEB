@@ -16,7 +16,12 @@ public class DesafioTarefa {
     private String Nome_tarefa;
     private int qtde_pontos;
 
-    // Getters e Setters
+    public DesafioTarefa(Long id2, String nome, boolean completada) {
+		this.ID = id2;
+		this.Nome_tarefa = nome;
+	}
+
+	// Getters e Setters
     public Long getID() {
         return ID;
     }
