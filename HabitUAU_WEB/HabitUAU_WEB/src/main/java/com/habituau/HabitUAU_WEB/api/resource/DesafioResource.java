@@ -90,15 +90,17 @@ public class DesafioResource {
         // Salva o Desafio para gerar o ID
         Desafio createdDesafio = desafioService.salvarDesafio(desafio);
 
-        // Converte TarefaDTO para DesafioTarefa e associa cada uma ao Desafio criado
+     // Converte TarefaDTO para DesafioTarefa e associa cada uma ao Desafio criado
         List<DesafioTarefa> tarefas = desafioDTO.getTarefas().stream()
-                .map(dto -> new DesafioTarefa(dto.getId(), dto.getNome(), dto.getqtde_pontos(), createdDesafio))
+                .map(dto -> {
+                    // Verifique e log para cada nome de tarefa para garantir que está populado
+                    System.out.println("Criando tarefa com nome: " + dto.getNome());
+                    return new DesafioTarefa(null, dto.getNome(), dto.getqtde_pontos(), createdDesafio);
+                })
                 .collect(Collectors.toList());
 
         // Salva cada tarefa no repositório
-        for (DesafioTarefa tarefa : tarefas) {
-            desafioTarefasRepository.save(tarefa);
-        }
+        desafioTarefasRepository.saveAll(tarefas);  // Salva todas as tarefas de uma vez
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDesafio);
     }
