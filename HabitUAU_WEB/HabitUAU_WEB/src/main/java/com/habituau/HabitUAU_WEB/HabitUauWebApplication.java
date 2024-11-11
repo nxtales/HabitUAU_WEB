@@ -12,7 +12,12 @@ public class HabitUauWebApplication implements WebMvcConfigurer{
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+	    registry.addMapping("/**")
+	        .allowedOrigins("https://ashy-ocean-0f803990f.5.azurestaticapps.net", "http://localhost:3000")
+	        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+	        .allowedHeaders("*")
+	        .allowCredentials(true)
+	        .maxAge(3600);
 	}
 	
 	public static void main(String[] args) {
