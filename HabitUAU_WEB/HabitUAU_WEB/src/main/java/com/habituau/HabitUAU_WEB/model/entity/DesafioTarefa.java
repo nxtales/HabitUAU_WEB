@@ -7,13 +7,17 @@ public class DesafioTarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_tarefa") 
     private Long ID;
 
     @ManyToOne
-    @JoinColumn(name = "ID_Desafio")
+    @JoinColumn(name = "id_desafio")
     private Desafio desafio;
 
+    @Column(name = "nome_tarefa")
     private String Nome_tarefa;
+    
+    @Column(name = "qtde_pontos")
     private int qtde_pontos;
     
     public DesafioTarefa() {}

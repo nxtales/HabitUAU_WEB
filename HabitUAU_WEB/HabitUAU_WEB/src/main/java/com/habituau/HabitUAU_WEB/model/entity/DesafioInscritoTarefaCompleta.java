@@ -13,7 +13,7 @@ public class DesafioInscritoTarefaCompleta {
 
 	    @Id
 	    @ManyToOne
-	    @JoinColumn(name = "ID_tarefa", referencedColumnName = "ID")
+	    @JoinColumn(name = "ID_tarefa", referencedColumnName = "id_tarefa")
 	    private DesafioTarefa tarefa;
 
 	    @Id
