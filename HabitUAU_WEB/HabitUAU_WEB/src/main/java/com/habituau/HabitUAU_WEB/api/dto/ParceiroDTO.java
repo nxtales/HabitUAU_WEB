@@ -6,16 +6,18 @@ public class ParceiroDTO {
     private Long segmentoId;
     private int qtdeDesafios;
     private byte[] foto;
+    private String nome;
 
     // Construtor vazio
     public ParceiroDTO() {}
 
     // Construtor com todos os campos
-    public ParceiroDTO(Long id, Long segmentoId, int qtdeDesafios, byte[] foto) {
+    public ParceiroDTO(Long id, Long segmentoId, int qtdeDesafios, String nome, byte[] foto) {
         this.id = id;
         this.segmentoId = segmentoId;
         this.qtdeDesafios = qtdeDesafios;
         this.foto = foto;
+        this.nome = nome;
     }
 
     // Getters e Setters
@@ -49,6 +51,14 @@ public class ParceiroDTO {
 
     public void setFoto(byte[] foto) {
         this.foto = foto;
+    }
+    
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
 

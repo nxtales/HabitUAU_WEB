@@ -37,10 +37,11 @@ public class ParceiroResource {
         parceiro.setSegmento(segmentoOpt.get());
         parceiro.setqtde_desafios(parceiroDTO.getQtdeDesafios());
         parceiro.setFoto(parceiroDTO.getFoto());
+        parceiro.setNome(parceiroDTO.getNome());
 
         Parceiro novoParceiro = parceiroService.criarParceiro(parceiro);
         ParceiroDTO responseDTO = new ParceiroDTO(novoParceiro.getId(), parceiroDTO.getSegmentoId(),
-                novoParceiro.getqtde_desafios(), novoParceiro.getFoto());
+                novoParceiro.getqtde_desafios(), novoParceiro.getNome(), novoParceiro.getFoto());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
@@ -65,10 +66,11 @@ public class ParceiroResource {
         parceiroAtualizado.setSegmento(segmentoOpt.get());
         parceiroAtualizado.setqtde_desafios(parceiroDTO.getQtdeDesafios());
         parceiroAtualizado.setFoto(parceiroDTO.getFoto());
+        parceiroAtualizado.setNome(parceiroDTO.getNome());
 
         Parceiro parceiro = parceiroService.alterarParceiro(id, parceiroAtualizado);
         ParceiroDTO responseDTO = new ParceiroDTO(parceiro.getId(), parceiroDTO.getSegmentoId(),
-                parceiro.getqtde_desafios(), parceiro.getFoto());
+                parceiro.getqtde_desafios(),parceiro.getNome(), parceiro.getFoto());
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -83,7 +85,7 @@ public class ParceiroResource {
 
         Parceiro parceiro = parceiroOpt.get();
         ParceiroDTO responseDTO = new ParceiroDTO(parceiro.getId(), parceiro.getSegmento().getId(),
-                parceiro.getqtde_desafios(), parceiro.getFoto());
+                parceiro.getqtde_desafios(), parceiro.getNome(), parceiro.getFoto());
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -93,7 +95,7 @@ public class ParceiroResource {
     public ResponseEntity<List<ParceiroDTO>> listarParceiros() {
         List<ParceiroDTO> parceiros = parceiroService.listarParceiros().stream()
                 .map(parceiro -> new ParceiroDTO(parceiro.getId(), parceiro.getSegmento().getId(),
-                        parceiro.getqtde_desafios(), parceiro.getFoto()))
+                        parceiro.getqtde_desafios(), parceiro.getNome(), parceiro.getFoto()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(parceiros);
     }

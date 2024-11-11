@@ -14,6 +14,8 @@ public class Parceiro {
     private Segmento Segmento;
 
     private int qtde_desafios;
+    
+   private String nome;
 
     @Lob
     private byte[] foto; // Foto do parceiro
@@ -49,5 +51,13 @@ public class Parceiro {
 
     public void setFoto(byte[] foto) {
         this.foto = foto;
+    }
+    
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
