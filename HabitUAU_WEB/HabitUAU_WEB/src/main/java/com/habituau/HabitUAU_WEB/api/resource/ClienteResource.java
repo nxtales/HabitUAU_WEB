@@ -1,11 +1,15 @@
 package com.habituau.HabitUAU_WEB.api.resource;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,11 +21,15 @@ import com.habituau.HabitUAU_WEB.api.dto.ClienteDTO;
 import com.habituau.HabitUAU_WEB.exceptions.ErroAutenticacao;
 import com.habituau.HabitUAU_WEB.exceptions.RegraNegocioException;
 import com.habituau.HabitUAU_WEB.model.entity.Cliente;
+import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
 import com.habituau.HabitUAU_WEB.service.UserService;
 
 @RestController
 @RequestMapping("/api/cliente")
 public class ClienteResource {
+	
+	@Autowired
+	private ClienteRepository repository;
 
 	private UserService service;
 
@@ -75,5 +83,38 @@ public class ClienteResource {
 		} catch (RegraNegocioException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
+	}
+	
+	@GetMapping("/retrieve/{cpf}")
+	public ResponseEntity<?> retrieveClientByCpf(@PathVariable String cpf) {
+	    // Busca o cliente pelo CPF
+	    Optional<Cliente> clienteOpt = repository.findByCPF(cpf);
+
+	    // Verifica se o cliente foi encontrado
+	    if (clienteOpt.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body("Cliente com CPF " + cpf + " não encontrado.");
+	    }
+
+	    Cliente cliente = clienteOpt.get();
+
+	    // Monta a resposta com as informações do cliente
+	    Map<String, Object> clienteInfo = new HashMap<>();
+	    clienteInfo.put("cpf", cliente.getCpf());
+	    clienteInfo.put("nome", cliente.getNome());
+	    clienteInfo.put("sobrenome", cliente.getSobrenome());
+	    clienteInfo.put("email", cliente.getEmail());
+	    clienteInfo.put("telefone", cliente.getTelefone());
+	    clienteInfo.put("genero", cliente.getGenero());
+	    clienteInfo.put("dataNascimento", cliente.getDataNascimento());
+	    clienteInfo.put("endereco", Map.of(
+	            "cep", cliente.getCep(),
+	            "cidade", cliente.getCidade(),
+	            "pais", cliente.getPais()
+	    ));
+	    clienteInfo.put("preferencias", cliente.getPreferencias());
+	    clienteInfo.put("metas", cliente.getMetas());
+
+	    return ResponseEntity.ok(clienteInfo);
 	}
 }
