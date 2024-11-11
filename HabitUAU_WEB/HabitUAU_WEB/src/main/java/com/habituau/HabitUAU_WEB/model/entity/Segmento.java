@@ -10,6 +10,8 @@ public class Segmento {
     private Long ID;
 
     private String Nome;
+    
+    public Segmento () {}
 
     // Getters e Setters
     public Long getId() {

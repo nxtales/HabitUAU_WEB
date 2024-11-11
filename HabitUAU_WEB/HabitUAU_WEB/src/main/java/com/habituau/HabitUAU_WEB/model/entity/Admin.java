@@ -20,6 +20,10 @@ public class Admin {
 
     private String senha;
     private String telefone;
+    
+    public Admin() {
+    	
+    }
 
     // Getters e Setters
     public Long getRe() {

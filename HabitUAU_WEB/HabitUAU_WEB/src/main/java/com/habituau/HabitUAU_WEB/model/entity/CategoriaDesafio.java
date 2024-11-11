@@ -11,6 +11,10 @@ public class CategoriaDesafio {
 
     private String Nome;
 
+    public CategoriaDesafio() {
+    	
+    }
+    
     // Getters e Setters
     public Long getId() {
         return ID;

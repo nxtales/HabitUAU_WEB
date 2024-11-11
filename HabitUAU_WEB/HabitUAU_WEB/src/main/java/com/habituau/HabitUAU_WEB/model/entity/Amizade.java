@@ -20,6 +20,10 @@ public class Amizade {
     @Temporal(TemporalType.DATE)
     private Date dataAmizade;
 
+    public Amizade() {
+    	
+    }
+    
     // Getters e Setters
     public Cliente getCliente1() {
         return cliente1;

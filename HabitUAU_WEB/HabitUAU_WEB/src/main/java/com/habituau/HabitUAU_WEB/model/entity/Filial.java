@@ -14,6 +14,8 @@ public class Filial {
     private String endereco;
     private String nome;
 
+    public Filial() {}
+    
     // Getters e Setters
     public Long getId() {
         return ID;

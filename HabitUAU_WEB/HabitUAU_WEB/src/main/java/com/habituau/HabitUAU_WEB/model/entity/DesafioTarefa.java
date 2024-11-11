@@ -15,6 +15,8 @@ public class DesafioTarefa {
 
     private String Nome_tarefa;
     private int qtde_pontos;
+    
+    public DesafioTarefa() {}
 
     public DesafioTarefa(Long id, String nome, int qtdePontos, Desafio desafio) {
         this.ID = id;

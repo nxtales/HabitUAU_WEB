@@ -24,6 +24,9 @@ public class Desafio {
 
     private String Nome;
     
+    public Desafio() {
+    }
+    
     public Desafio(Long ID, Parceiro parceiro, CategoriaDesafio categoria, String nome, List<DesafioTarefa> tasks) {
         this.ID = ID;
         this.parceiro = parceiro;

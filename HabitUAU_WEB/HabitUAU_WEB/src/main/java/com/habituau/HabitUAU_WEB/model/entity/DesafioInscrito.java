@@ -22,6 +22,10 @@ public class DesafioInscrito {
     @JoinColumn(name = "ID_Desafio", insertable = false, updatable = false)
     private Desafio desafio;
 
+    public DesafioInscrito() {
+    	
+    }
+    
     // Getters and setters
     public String getCpfCliente() {
         return CPF_cliente;

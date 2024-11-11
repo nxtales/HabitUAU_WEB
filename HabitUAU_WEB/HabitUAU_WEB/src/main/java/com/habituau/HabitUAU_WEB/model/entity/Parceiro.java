@@ -19,6 +19,8 @@ public class Parceiro {
 
     @Lob
     private byte[] foto; // Foto do parceiro
+    
+    public Parceiro() {}
 
     // Getters e Setters
     public Long getId() {

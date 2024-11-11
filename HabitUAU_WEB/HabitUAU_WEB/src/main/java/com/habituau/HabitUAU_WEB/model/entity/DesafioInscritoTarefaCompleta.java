@@ -23,6 +23,8 @@ public class DesafioInscritoTarefaCompleta {
 
 	    private int sumPontos;
 
+	    public DesafioInscritoTarefaCompleta() {}
+	    
 	    // Getters e Setters
 	    public Cliente getCliente() {
 	        return cliente;
