@@ -12,10 +12,18 @@ import org.springframework.web.bind.annotation.*;
 
 import com.habituau.HabitUAU_WEB.api.dto.DesafioDTO;
 import com.habituau.HabitUAU_WEB.api.dto.TarefaDTO;
+import com.habituau.HabitUAU_WEB.model.entity.CategoriaDesafio;
+import com.habituau.HabitUAU_WEB.model.entity.Cliente;
 import com.habituau.HabitUAU_WEB.model.entity.Desafio;
+import com.habituau.HabitUAU_WEB.model.entity.DesafioInscrito;
 import com.habituau.HabitUAU_WEB.model.entity.DesafioTarefa;
+import com.habituau.HabitUAU_WEB.model.entity.Parceiro;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioTarefasRepository;
+import com.habituau.HabitUAU_WEB.model.repository.ParceiroRepository;
+import com.habituau.HabitUAU_WEB.model.repository.CategoriasDesafiosRepository;
+import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
+import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosTarefasCompletasRepository;
 import com.habituau.HabitUAU_WEB.service.ChallengeService;
 
@@ -34,6 +42,18 @@ public class DesafioResource {
 
     @Autowired
     private DesafioInscritosTarefasCompletasRepository tarefasCompletasRepository;
+    
+    @Autowired
+    private CategoriasDesafiosRepository categoriasRepository;
+    
+    @Autowired
+    private ParceiroRepository parceiroRepository;
+    
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private DesafioInscritosRepository desafioInscritosRepository;
 
     // Método para obter tarefas do usuário inscrito no desafio
     @GetMapping("/getuserchallengetasks")
@@ -41,48 +61,52 @@ public class DesafioResource {
         return desafioService.getUserChallengeTasks(cpf);
     }
 
-    // Método para criar um novo desafio
     @PostMapping("/create")
-    public ResponseEntity<Desafio> createChallenge(@RequestBody DesafioDTO desafioDTO) {
-        // Converte TarefaDTO para DesafioTarefa, se necessário
-        List<DesafioTarefa> tarefas = desafioDTO.getTarefas().stream()
-                .map(dto -> new DesafioTarefa(dto.getId(), dto.getNome(), dto.isCompletada()))
-                .collect(Collectors.toList());
+    public ResponseEntity<?> createChallenge(@RequestBody DesafioDTO desafioDTO) {
+        // Verifique se o parceiro existe pelo ID fornecido
+        Optional<Parceiro> parceiroOpt = parceiroRepository.findById(desafioDTO.getParceiroId());
+        if (parceiroOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Parceiro com ID " + desafioDTO.getParceiroId() + " não encontrado.");
+        }
+        Parceiro parceiro = parceiroOpt.get();
 
-        // Usa o construtor sem ID, pois é uma criação
+        // Verifique se a categoria existe pelo ID fornecido
+        Optional<CategoriaDesafio> categoriaOpt = categoriasRepository.findById(desafioDTO.getCategoriaId());
+        if (categoriaOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Categoria com ID " + desafioDTO.getCategoriaId() + " não encontrada.");
+        }
+        CategoriaDesafio categoria = categoriaOpt.get();
+
+        // Crie o objeto Desafio com as referências pesquisadas para Parceiro e CategoriaDesafio
         Desafio desafio = new Desafio(
-                desafioDTO.getParceiroId(),
-                desafioDTO.getCategoriaId(),
+                parceiro,
+                categoria,
                 desafioDTO.getNome(),
-                tarefas
+                null
         );
-        
+
+        // Salva o Desafio para gerar o ID
         Desafio createdDesafio = desafioService.salvarDesafio(desafio);
 
-        // Busca as tarefas associadas ao desafio criado
-        //List<DesafioTarefa> tarefasCriadas = desafioTarefasRepository.findByDesafioID(createdDesafio.getId());
+        // Converte TarefaDTO para DesafioTarefa e associa cada uma ao Desafio criado
+        List<DesafioTarefa> tarefas = desafioDTO.getTarefas().stream()
+                .map(dto -> new DesafioTarefa(dto.getId(), dto.getNome(), dto.getqtde_pontos(), createdDesafio))
+                .collect(Collectors.toList());
 
-        /*// Mapeando para o DTO e verificando a completude de cada tarefa
-        DesafioDTO createdDTO = new DesafioDTO(
-                createdDesafio.getId(),
-                createdDesafio.getParceiro().getId(),
-                createdDesafio.getCategoria().getId(),
-                createdDesafio.getNome(),
-                tarefasCriadas.stream()
-                       .map(t -> {
-                           // Verifica se a tarefa está completa
-                           boolean completada = tarefasCompletasRepository
-                                   .findByClienteCPFAndTarefaIDAndDesafioID(cpf, t.getID(), createdDesafio.getId())
-                                   .isPresent();
-                           return new TarefaDTO(t.getID(), t.getNome_tarefa(), completada);
-                       })
-                       .collect(Collectors.toList())
-        );*/
+        // Salva cada tarefa no repositório
+        for (DesafioTarefa tarefa : tarefas) {
+            desafioTarefasRepository.save(tarefa);
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDesafio);
     }
 
+
+
     // Método para atualizar um desafio
-    @PutMapping("/edit/{id}")
+    /*@PutMapping("/edit/{id}")
     public ResponseEntity<Desafio> updateChallenge(@PathVariable Long id, @RequestBody DesafioDTO desafioDTO, @RequestParam String cpf) {
         // Converte TarefaDTO para DesafioTarefa, se necessário
         List<DesafioTarefa> tarefas = desafioDTO.getTarefas().stream()
@@ -103,7 +127,7 @@ public class DesafioResource {
         // Busca as tarefas associadas ao desafio atualizado
         List<DesafioTarefa> tarefasAtualizadas = desafioTarefasRepository.findByDesafioID(updatedDesafio.getId());
 
-        /*// Mapeando para o DTO atualizado e verificando a completude de cada tarefa
+        // Mapeando para o DTO atualizado e verificando a completude de cada tarefa
         DesafioDTO updatedDTO = new DesafioDTO(
                 updatedDesafio.getId(),
                 updatedDesafio.getParceiro().getId(),
@@ -117,9 +141,9 @@ public class DesafioResource {
                            return new TarefaDTO(t.getID(), t.getNome_tarefa(), completada);
                        })
                        .collect(Collectors.toList())
-        );*/
+        );
         return ResponseEntity.ok(updatedDesafio);
-    }
+    }*/
     
     
  // Método para deletar um desafio por ID
@@ -141,5 +165,41 @@ public class DesafioResource {
         return ResponseEntity.ok(desafios);
     }
 
-    // Outros métodos da classe permanecem inalterados...
+    @PostMapping("/enroll")
+    public ResponseEntity<?> enrollUserInChallenge(@RequestParam String cpfCliente, @RequestParam Long idDesafio) {
+        // Verificar se o cliente existe
+        Optional<Cliente> clienteOpt = clienteRepository.findByCPF(cpfCliente);
+        if (clienteOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Cliente com CPF " + cpfCliente + " não encontrado.");
+        }
+        Cliente cliente = clienteOpt.get();
+
+        // Verificar se o desafio existe
+        Optional<Desafio> desafioOpt = desafiorepository.findById(idDesafio);
+        if (desafioOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Desafio com ID " + idDesafio + " não encontrado.");
+        }
+        Desafio desafio = desafioOpt.get();
+
+        // Verificar se o cliente já está inscrito no desafio
+        Optional<DesafioInscrito> inscricaoExistente = desafioInscritosRepository.findByClienteCPFAndDesafioID(cpfCliente, idDesafio);
+        if (inscricaoExistente.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Cliente já inscrito no desafio.");
+        }
+
+        // Criar a nova inscrição
+        DesafioInscrito novaInscricao = new DesafioInscrito();
+        novaInscricao.setCpfCliente(cpfCliente);
+        novaInscricao.setIdDesafio(idDesafio);
+        novaInscricao.setCliente(cliente);
+        novaInscricao.setDesafio(desafio);
+
+        // Salvar a inscrição
+        desafioInscritosRepository.save(novaInscricao);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("inscrito com sucesso!");
+    }
 }

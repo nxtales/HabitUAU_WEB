@@ -4,14 +4,16 @@ public class TarefaDTO {
     private Long id;
     private String nome;
     private boolean completada;
+    private int qtdepontos;
 
     // Construtores, getters e setters
 
     public TarefaDTO() {}
 
-    public TarefaDTO(Long id, String nome, boolean completada) {
+    public TarefaDTO(Long id, String nome, int qtdepontos, boolean completada) {
         this.id = id;
         this.nome = nome;
+        this.qtdepontos = qtdepontos;
         this.completada = completada;
     }
 
@@ -38,4 +40,8 @@ public class TarefaDTO {
     public void setCompletada(boolean completada) {
         this.completada = completada;
     }
+
+	public int getqtde_pontos() {
+		return qtdepontos;
+	}
 }

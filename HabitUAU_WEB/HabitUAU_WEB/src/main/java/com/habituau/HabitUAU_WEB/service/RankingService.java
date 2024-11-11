@@ -1,14 +1,10 @@
 package com.habituau.HabitUAU_WEB.service;
 
+import com.habituau.HabitUAU_WEB.api.dto.RankingDTO;
 import java.util.List;
-
-import com.habituau.HabitUAU_WEB.model.entity.UserRanking;
+import java.util.Optional;
 
 public interface RankingService {
-
-    List<UserRanking> getCommunityRankings();
-
-    int getUserRankingPosition(Long cpf);
-
-    List<UserRanking> getTopRankings(int limit);
+    Optional<RankingDTO> getMaiorPontuacaoPorDesafio(String cpfCliente);
+    List<RankingDTO> getRankingGeral();
 }

@@ -4,21 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.habituau.HabitUAU_WEB.model.entity.CategoriaDesafio;
 import com.habituau.HabitUAU_WEB.model.entity.Cliente;
 import com.habituau.HabitUAU_WEB.model.entity.Desafio;
 import com.habituau.HabitUAU_WEB.model.entity.DesafioInscrito;
 import com.habituau.HabitUAU_WEB.model.entity.DesafioTarefa;
+import com.habituau.HabitUAU_WEB.model.entity.Parceiro;
+import com.habituau.HabitUAU_WEB.model.repository.CategoriasDesafiosRepository;
 import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosTarefasCompletasRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioTarefasRepository;
+import com.habituau.HabitUAU_WEB.model.repository.ParceiroRepository;
 import com.habituau.HabitUAU_WEB.service.ChallengeService;
 
 @Service
@@ -30,7 +35,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final DesafioInscritosRepository inscritosrepository;
     private final DesafioTarefasRepository tarefasrepository;
     private final DesafioInscritosTarefasCompletasRepository tarefascompletasrepository;
-    
+
+    @Autowired
+    private ParceiroRepository parceiroRepository;
+
+    @Autowired
+    private CategoriasDesafiosRepository categoriasDesafiosRepository;
 
     @Autowired
     public ChallengeServiceImpl(DesafioInscritosTarefasCompletasRepository tarefascompletasrepository, DesafioTarefasRepository tarefasrepository, DesafioRepository desafioRepository, ClienteRepository clienteRepository, DesafioInscritosRepository inscritosrepository) {
@@ -44,7 +54,24 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public Desafio createChallenge(Long parceiroId, Long categoriaId, String nome, List<DesafioTarefa> tasks) {
-        Desafio desafio = new Desafio(parceiroId, categoriaId, nome, tasks);
+        // Busca o Parceiro pelo ID
+        Optional<Parceiro> parceiroOpt = parceiroRepository.findById(parceiroId);
+        if (parceiroOpt.isEmpty()) {
+            throw new IllegalArgumentException("Parceiro com ID " + parceiroId + " não encontrado.");
+        }
+        Parceiro parceiro = parceiroOpt.get();
+
+        // Busca a Categoria pelo ID
+        Optional<CategoriaDesafio> categoriaOpt = categoriasDesafiosRepository.findById(categoriaId);
+        if (categoriaOpt.isEmpty()) {
+            throw new IllegalArgumentException("Categoria com ID " + categoriaId + " não encontrada.");
+        }
+        CategoriaDesafio categoria = categoriaOpt.get();
+
+        // Cria o objeto Desafio com Parceiro e Categoria existentes
+        Desafio desafio = new Desafio(parceiro, categoria, nome, tasks);
+
+        // Salva o desafio no banco de dados
         return desafioRepository.save(desafio);
     }
 
