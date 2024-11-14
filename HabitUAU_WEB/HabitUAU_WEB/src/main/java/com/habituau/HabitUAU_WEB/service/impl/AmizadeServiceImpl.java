@@ -33,18 +33,20 @@ public class AmizadeServiceImpl implements AmizadeService {
         Cliente cliente2 = clienteRepository.findByEmail(emailCliente2)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente com email " + emailCliente2 + " não encontrado"));
 
-        // Cria nova amizade
+     // Cria nova amizade e preenche manualmente todos os campos, incluindo os IDs com CPF
         Amizade amizade = new Amizade();
-        amizade.setCliente1(cliente1);
-        amizade.setCliente2(cliente2);
-        amizade.setDataAmizade(new Date());
+        amizade.setCliente1(cliente1);           // Campo cliente1 (idcli1 no banco), associado ao cliente1
+        amizade.setCliente2(cliente2);           // Campo cliente2 (idcli2 no banco), associado ao cliente2
+        amizade.setDataAmizade(new Date());      // Define a data de amizade como a data atual
 
+        // Salva a amizade no banco
         Amizade novaAmizade = amizadesRepository.save(amizade);
 
+        // Retorna um DTO preenchido com as informações relevantes dos clientes
         return new AmizadeDTO(
-            novaAmizade.getCliente1().getEmail(), // Retorna o email em vez do CPF
+            novaAmizade.getCliente1().getCpf(),     // Retorna CPF do cliente1 para o campo idcli1
             novaAmizade.getCliente1().getNome(),
-            novaAmizade.getCliente2().getEmail(), // Retorna o email em vez do CPF
+            novaAmizade.getCliente2().getCpf(),     // Retorna CPF do cliente2 para o campo idcli2
             novaAmizade.getCliente2().getNome(),
             novaAmizade.getDataAmizade()
         );
