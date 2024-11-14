@@ -204,4 +204,9 @@ public class DesafioResource {
 
         return ResponseEntity.status(HttpStatus.CREATED).body("inscrito com sucesso!");
     }
+    
+    @GetMapping("/getAll")
+	public ResponseEntity getAll() {
+		return ResponseEntity.ok(desafiorepository.findAll());
+	}
 }

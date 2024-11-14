@@ -2,6 +2,7 @@ package com.habituau.HabitUAU_WEB.api.resource;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -116,5 +117,11 @@ public class ClienteResource {
 	    clienteInfo.put("metas", cliente.getMetas());
 
 	    return ResponseEntity.ok(clienteInfo);
+	}
+	
+	// Método para obter todos os clientes
+	@GetMapping("/getAll")
+	public ResponseEntity<?> getAll() {
+		return ResponseEntity.ok(repository.findAll());
 	}
 }

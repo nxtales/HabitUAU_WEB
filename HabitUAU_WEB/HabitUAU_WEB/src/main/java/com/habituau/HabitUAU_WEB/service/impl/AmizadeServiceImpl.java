@@ -26,12 +26,12 @@ public class AmizadeServiceImpl implements AmizadeService {
 
     @Override
     @Transactional
-    public AmizadeDTO criarAmizade(String cpfCliente1, String cpfCliente2) {
-        // Busca os clientes pelo CPF
-        Cliente cliente1 = clienteRepository.findByCPF(cpfCliente1)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente com CPF " + cpfCliente1 + " não encontrado"));
-        Cliente cliente2 = clienteRepository.findByCPF(cpfCliente2)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente com CPF " + cpfCliente2 + " não encontrado"));
+    public AmizadeDTO criarAmizade(String emailCliente1, String emailCliente2) {
+        // Busca os clientes pelo email
+        Cliente cliente1 = clienteRepository.findByEmail(emailCliente1)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente com email " + emailCliente1 + " não encontrado"));
+        Cliente cliente2 = clienteRepository.findByEmail(emailCliente2)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente com email " + emailCliente2 + " não encontrado"));
 
         // Cria nova amizade
         Amizade amizade = new Amizade();
@@ -42,13 +42,14 @@ public class AmizadeServiceImpl implements AmizadeService {
         Amizade novaAmizade = amizadesRepository.save(amizade);
 
         return new AmizadeDTO(
-            novaAmizade.getCliente1().getCpf(),
+            novaAmizade.getCliente1().getEmail(), // Retorna o email em vez do CPF
             novaAmizade.getCliente1().getNome(),
-            novaAmizade.getCliente2().getCpf(),
+            novaAmizade.getCliente2().getEmail(), // Retorna o email em vez do CPF
             novaAmizade.getCliente2().getNome(),
             novaAmizade.getDataAmizade()
         );
     }
+
 
     @Override
     @Transactional(readOnly = true)
