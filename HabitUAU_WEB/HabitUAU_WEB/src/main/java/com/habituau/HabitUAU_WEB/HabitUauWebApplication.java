@@ -22,12 +22,7 @@ public class HabitUauWebApplication implements WebMvcConfigurer{
 	
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-	    registry.addMapping("/**")
-	        .allowedOrigins("*") // Permite qualquer origem
-	        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Permite todos os métodos HTTP
-	        .allowedHeaders("*") // Permite todos os cabeçalhos
-	        .allowCredentials(false) // Defina como false se não precisar de cookies/sessões
-	        .maxAge(3600);
+		registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
 	}
 
 	
