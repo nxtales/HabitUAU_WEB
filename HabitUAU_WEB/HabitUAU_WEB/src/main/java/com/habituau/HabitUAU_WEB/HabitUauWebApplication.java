@@ -20,9 +20,16 @@ public class HabitUauWebApplication implements WebMvcConfigurer{
 	        .maxAge(3600);
 	}*/
 	
+	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-	    registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+	    registry.addMapping("/**")
+	        .allowedOrigins("*") // Permite qualquer origem
+	        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Permite todos os métodos HTTP
+	        .allowedHeaders("*") // Permite todos os cabeçalhos
+	        .allowCredentials(false) // Defina como false se não precisar de cookies/sessões
+	        .maxAge(3600);
 	}
+
 	
 	public static void main(String[] args) {
 		SpringApplication.run(HabitUauWebApplication.class, args);
