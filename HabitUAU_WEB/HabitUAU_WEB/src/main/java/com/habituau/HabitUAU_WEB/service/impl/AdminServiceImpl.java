@@ -3,10 +3,13 @@ package com.habituau.HabitUAU_WEB.service.impl;
 import com.habituau.HabitUAU_WEB.exceptions.ErroAutenticacao;
 import com.habituau.HabitUAU_WEB.exceptions.RegraNegocioException;
 import com.habituau.HabitUAU_WEB.model.entity.Admin;
+import com.habituau.HabitUAU_WEB.model.entity.Filial;
 import com.habituau.HabitUAU_WEB.model.repository.AdminRepository;
+import com.habituau.HabitUAU_WEB.model.repository.FiliaisRepository;
 import com.habituau.HabitUAU_WEB.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -14,19 +17,29 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
+    
+    @Autowired
+    private FiliaisRepository filialrepository;
 
     @Autowired
     public AdminServiceImpl(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
 
+    
+    @Transactional
     @Override
     public Admin registerAdmin(Long RE, String email, String Nome, String Sobrenome, Long filialId, String senha, String telefone) {
         if (adminRepository.existsByEmail(email)) {
             throw new RegraNegocioException("Já existe um admin cadastrado com este e-mail.");
         }
 
-        Admin admin = new Admin(RE, email, Nome, Sobrenome, null, senha, telefone);
+        Filial filialfound = filialrepository.findById(filialId).get();
+        if(filialfound == null) {
+        	throw new RegraNegocioException("Filial não encontrada");
+        }
+        
+        Admin admin = new Admin(RE, email, Nome, Sobrenome, filialfound, senha, telefone);
         return adminRepository.save(admin);
     }
 
@@ -54,6 +67,8 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.save(admin);
     }
 
+    
+    @Transactional
     @Override
     public void deleteAdminByRE(Long RE) {
         if (!adminRepository.existsByRE(RE)) {
