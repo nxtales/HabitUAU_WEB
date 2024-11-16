@@ -6,5 +6,6 @@ import java.util.List;
 public interface AmizadeService {
     AmizadeDTO criarAmizade(String cpfCliente1, String cpfCliente2);
     List<AmizadeDTO> buscarAmizadesPorCliente(String cpf);
+    boolean deletarAmizade(String emailCliente1, String emailCliente2);
 }
 

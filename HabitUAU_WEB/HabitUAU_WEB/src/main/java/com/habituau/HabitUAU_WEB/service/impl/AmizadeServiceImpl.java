@@ -33,39 +33,60 @@ public class AmizadeServiceImpl implements AmizadeService {
         Cliente cliente2 = clienteRepository.findByEmail(emailCliente2)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente com email " + emailCliente2 + " não encontrado"));
 
-     // Cria nova amizade e preenche manualmente todos os campos, incluindo os IDs com CPF
+        // Cria nova amizade e preenche manualmente todos os campos
         Amizade amizade = new Amizade();
-        amizade.setCliente1(cliente1);           // Campo cliente1 (idcli1 no banco), associado ao cliente1
-        amizade.setCliente2(cliente2);           // Campo cliente2 (idcli2 no banco), associado ao cliente2
-        amizade.setDataAmizade(new Date());      // Define a data de amizade como a data atual
+        amizade.setCliente1(cliente1);  // Preenche cliente1 (id_cli1)
+        amizade.setCliente2(cliente2);  // Preenche cliente2 (id_cli2)
+        amizade.setDataAmizade(new Date()); // Define a data da amizade
 
         // Salva a amizade no banco
         Amizade novaAmizade = amizadesRepository.save(amizade);
 
         // Retorna um DTO preenchido com as informações relevantes dos clientes
         return new AmizadeDTO(
-            novaAmizade.getCliente1().getCpf(),     // Retorna CPF do cliente1 para o campo idcli1
-            novaAmizade.getCliente1().getNome(),
-            novaAmizade.getCliente2().getCpf(),     // Retorna CPF do cliente2 para o campo idcli2
-            novaAmizade.getCliente2().getNome(),
-            novaAmizade.getDataAmizade()
+            novaAmizade.getCliente1().getCpf(),  // CPF do cliente1 (idcli1)
+            novaAmizade.getCliente1().getNome(), // Nome do cliente1
+            novaAmizade.getCliente2().getCpf(),  // CPF do cliente2 (idcli2)
+            novaAmizade.getCliente2().getNome(), // Nome do cliente2
+            novaAmizade.getDataAmizade()         // Data da amizade
         );
     }
-
 
     @Override
     @Transactional(readOnly = true)
     public List<AmizadeDTO> buscarAmizadesPorCliente(String cpf) {
+        // Busca todas as amizades associadas ao CPF fornecido
         List<Amizade> amizades = amizadesRepository.findByClienteCpf(cpf);
 
+        // Converte as amizades para DTOs
         return amizades.stream()
             .map(amizade -> new AmizadeDTO(
-                amizade.getCliente1().getCpf(),
-                amizade.getCliente1().getNome(),
-                amizade.getCliente2().getCpf(),
-                amizade.getCliente2().getNome(),
-                amizade.getDataAmizade()
+                amizade.getCliente1().getCpf(), // CPF do cliente1
+                amizade.getCliente1().getNome(), // Nome do cliente1
+                amizade.getCliente2().getCpf(), // CPF do cliente2
+                amizade.getCliente2().getNome(), // Nome do cliente2
+                amizade.getDataAmizade()        // Data da amizade
             ))
             .collect(Collectors.toList());
+    }
+    
+    @Override
+    @Transactional
+    public boolean deletarAmizade(String emailCliente1, String emailCliente2) {
+        // Busca os clientes pelo email
+        Cliente cliente1 = clienteRepository.findByEmail(emailCliente1)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente com email " + emailCliente1 + " não encontrado"));
+        Cliente cliente2 = clienteRepository.findByEmail(emailCliente2)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente com email " + emailCliente2 + " não encontrado"));
+
+        // Busca a amizade pelo cliente1 e cliente2
+        Optional<Amizade> amizadeOpt = amizadesRepository.findByCliente1AndCliente2(cliente1, cliente2);
+
+        if (amizadeOpt.isPresent()) {
+            amizadesRepository.delete(amizadeOpt.get());
+            return true;
+        }
+
+        return false;
     }
 }

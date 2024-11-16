@@ -38,4 +38,16 @@ public class AmizadeResource {
 	public ResponseEntity getAll() {
 		return ResponseEntity.ok(repository.findAll());
 	}
+    
+    // Endpoint para deletar uma amizade usando os emails dos clientes
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deletarAmizade(@RequestParam String emailCliente1, @RequestParam String emailCliente2) {
+        boolean amizadeRemovida = amizadeService.deletarAmizade(emailCliente1, emailCliente2);
+
+        if (amizadeRemovida) {
+            return ResponseEntity.ok("Amizade removida com sucesso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amizade não encontrada.");
+        }
+    }
 }
