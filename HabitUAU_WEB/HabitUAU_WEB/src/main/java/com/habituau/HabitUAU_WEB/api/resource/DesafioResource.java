@@ -95,7 +95,7 @@ public class DesafioResource {
                 .map(dto -> {
                     // Verifique e log para cada nome de tarefa para garantir que está populado
                     System.out.println("Criando tarefa com nome: " + dto.getNome());
-                    return new DesafioTarefa(null, dto.getNome(), dto.getqtde_pontos(), createdDesafio);
+                    return new DesafioTarefa(null, dto.getNome(), dto.getQtdepontos(), createdDesafio);
                 })
                 .collect(Collectors.toList());
 
