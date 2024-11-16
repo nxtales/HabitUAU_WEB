@@ -1,35 +1,19 @@
-package com.habituau.HabitUAU_WEB.model.entity;
+package com.habituau.HabitUAU_WEB.api.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-public class Filial {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FilialDTO {
     private Long ID;
-
     private String cidade;
     private String CEP;
     private String endereco;
     private String nome;
 
-    public Filial() {}
-    
-    public Filial(String cidade, String CEP, String endereco, String nome) {
-        this.cidade = cidade;
-        this.CEP = CEP;
-        this.endereco = endereco;
-        this.nome = nome;
-    }
-    
     // Getters e Setters
-    public Long getId() {
+    public Long getID() {
         return ID;
     }
 
-    public void setId(Long id) {
-        this.ID = id;
+    public void setID(Long ID) {
+        this.ID = ID;
     }
 
     public String getCidade() {

@@ -24,6 +24,16 @@ public class Admin {
     public Admin() {
     	
     }
+    
+    public Admin(Long RE, String email, String Nome, String Sobrenome, Filial filial, String senha, String telefone) {
+        this.RE = RE;
+        this.email = email;
+        this.Nome = Nome;
+        this.Sobrenome = Sobrenome;
+        this.filial = filial;
+        this.senha = senha;
+        this.telefone = telefone;
+    }
 
     // Getters e Setters
     public Long getRe() {
