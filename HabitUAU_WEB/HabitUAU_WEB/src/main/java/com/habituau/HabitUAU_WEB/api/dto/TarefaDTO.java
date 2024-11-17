@@ -4,14 +4,14 @@ public class TarefaDTO {
     private Long id;
     private String nome;
     private boolean completada;
-    private int qtdepontos;
+    private Long qtdepontos;
     private Long idDesafio; // Novo campo para ID do desafio
 
     // Construtores, getters e setters
 
     public TarefaDTO() {}
 
-    public TarefaDTO(Long id, String nome, int qtdepontos, boolean completada, Long idDesafio) {
+    public TarefaDTO(Long id, String nome, Long qtdepontos, boolean completada, Long idDesafio) {
         this.id = id;
         this.nome = nome;
         this.qtdepontos = qtdepontos;
@@ -43,11 +43,11 @@ public class TarefaDTO {
         this.completada = completada;
     }
 
-    public int getQtdepontos() {
+    public Long getQtdepontos() {
         return qtdepontos;
     }
 
-    public void setQtdepontos(int qtdepontos) {
+    public void setQtdepontos(Long qtdepontos) {
         this.qtdepontos = qtdepontos;
     }
 

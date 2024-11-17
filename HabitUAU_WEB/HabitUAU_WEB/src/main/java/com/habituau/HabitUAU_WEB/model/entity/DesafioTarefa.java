@@ -18,11 +18,11 @@ public class DesafioTarefa {
     private String Nome_tarefa;
     
     @Column(name = "qtde_pontos")
-    private int qtde_pontos;
+    private Long qtde_pontos;
     
     public DesafioTarefa() {}
 
-    public DesafioTarefa(Long id, String nome, int qtdePontos, Desafio desafio) {
+    public DesafioTarefa(Long id, String nome, Long qtdePontos, Desafio desafio) {
         this.ID = id;
         this.Nome_tarefa = nome;
         this.qtde_pontos = qtdePontos;
@@ -54,11 +54,11 @@ public class DesafioTarefa {
         this.Nome_tarefa = Nome_tarefa;
     }
 
-    public int getqtde_pontos() {
+    public Long getqtde_pontos() {
         return qtde_pontos;
     }
 
-    public void setqtde_pontos(int qtde_pontos) {
+    public void setqtde_pontos(Long qtde_pontos) {
         this.qtde_pontos = qtde_pontos;
     }
 }
