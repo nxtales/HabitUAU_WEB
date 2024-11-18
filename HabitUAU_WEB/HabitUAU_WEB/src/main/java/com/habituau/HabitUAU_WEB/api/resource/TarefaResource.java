@@ -49,7 +49,50 @@ public class TarefaResource {
         return ResponseEntity.ok(tarefasDTO);
     }
 
-    // Endpoint para validar e registrar tarefa como completa
+ // Endpoint para editar uma tarefa existente
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<TarefaDTO> editTarefa(@PathVariable Long id, @RequestBody TarefaDTO tarefaDTO) {
+        Optional<DesafioTarefa> tarefaOpt = tarefasRepository.findById(id);
+
+        if (tarefaOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        DesafioTarefa tarefa = tarefaOpt.get();
+        tarefa.setNome_tarefa(tarefaDTO.getNome());
+        tarefa.setqtde_pontos(tarefaDTO.getQtdepontos());
+
+        // Salva as alterações
+        DesafioTarefa updatedTarefa = tarefasRepository.save(tarefa);
+
+        // Converte para DTO e retorna
+        TarefaDTO updatedTarefaDTO = new TarefaDTO(
+                updatedTarefa.getID(),
+                updatedTarefa.getNome_tarefa(),
+                updatedTarefa.getqtde_pontos(),
+                false, // Completude permanece false
+                updatedTarefa.getDesafio() != null ? updatedTarefa.getDesafio().getId() : null
+        );
+
+        return ResponseEntity.ok(updatedTarefaDTO);
+    }
+
+    // Endpoint para deletar uma tarefa
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteTarefa(@PathVariable Long id) {
+        Optional<DesafioTarefa> tarefaOpt = tarefasRepository.findById(id);
+
+        if (tarefaOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Deleta a tarefa
+        tarefasRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+    
+ // Endpoint para validar e registrar tarefa como completa
     @PostMapping("/validateAndComplete")
     public ResponseEntity<?> validateAndCompleteTarefa(
             @RequestParam Long tarefaId,
@@ -79,8 +122,9 @@ public class TarefaResource {
             // Imprime todas as descrições recebidas
             System.out.println("Descrições retornadas pela Azure Vision: " + descriptions);
 
+            // Validação ajustada
             boolean isSimilar = descriptions.stream()
-                    .anyMatch(description -> isTextSimilar(tarefa.getNome_tarefa(), description));
+                    .anyMatch(description -> isContextuallySimilar(tarefa.getNome_tarefa(), description));
 
             if (!isSimilar) {
                 return ResponseEntity.badRequest().body("A descrição da imagem não é compatível com o nome da tarefa. Descrições retornadas: " + descriptions);
@@ -129,6 +173,36 @@ public class TarefaResource {
         return Collections.emptyList();
     }
 
+    private boolean isContextuallySimilar(String taskName, String description) {
+        // Normalização dos textos
+        String normalizedTaskName = normalizeText(taskName);
+        String normalizedDescription = normalizeText(description);
+
+        // Verifica similaridade de cosseno
+        boolean cosineSimilar = isTextSimilar(normalizedTaskName, normalizedDescription);
+
+        // Verifica correspondência de palavras-chave
+        boolean keywordMatch = containsImportantWords(normalizedTaskName, normalizedDescription);
+
+        // Combina os critérios
+        return cosineSimilar || keywordMatch;
+    }
+
+    private String normalizeText(String text) {
+        return text.toLowerCase()
+                .replaceAll("[^a-z0-9 ]", "") // Remove caracteres especiais
+                .trim();
+    }
+
+    private boolean containsImportantWords(String text1, String text2) {
+        Set<String> words1 = new HashSet<>(Arrays.asList(text1.split("\\s+")));
+        Set<String> words2 = new HashSet<>(Arrays.asList(text2.split("\\s+")));
+
+        words1.retainAll(words2); // Mantém apenas palavras em comum
+
+        return !words1.isEmpty(); // Retorna true se houver interseção
+    }
+
     private boolean isTextSimilar(String text1, String text2) {
         Map<String, Integer> vector1 = buildWordFrequencyVector(text1);
         Map<String, Integer> vector2 = buildWordFrequencyVector(text2);
@@ -150,7 +224,7 @@ public class TarefaResource {
         }
 
         double similarity = dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
-        return similarity > 0.3; // Threshold de similaridade ajustável
+        return similarity > 0.3; // Threshold ajustado
     }
 
     private Map<String, Integer> buildWordFrequencyVector(String text) {
