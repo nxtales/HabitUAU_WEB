@@ -6,13 +6,13 @@ import java.util.Objects;
 public class DesafioInscritosTarefasCompletasId implements Serializable {
     
 	private String cliente;  // Deve ter o mesmo nome do campo na entidade
-    private Integer tarefa;  // Mesmo nome do campo na entidade
-    private Integer desafio; // Mesmo nome do campo na entidade
+    private Long tarefa;  // Mesmo nome do campo na entidade
+    private Long desafio; // Mesmo nome do campo na entidade
 
     // Construtores
     public DesafioInscritosTarefasCompletasId() {}
 
-    public DesafioInscritosTarefasCompletasId(String cliente, Integer tarefa, Integer desafio) {
+    public DesafioInscritosTarefasCompletasId(String cliente, Long tarefa, Long desafio) {
         this.cliente = cliente;
         this.tarefa = tarefa;
         this.desafio = desafio;
@@ -27,19 +27,19 @@ public class DesafioInscritosTarefasCompletasId implements Serializable {
         this.cliente = cpfCliente;
     }
 
-    public Integer getIdTarefa() {
+    public Long getIdTarefa() {
         return tarefa;
     }
 
-    public void setIdTarefa(Integer idTarefa) {
+    public void setIdTarefa(Long idTarefa) {
         this.tarefa = idTarefa;
     }
 
-    public Integer getIdDesafio() {
+    public Long getIdDesafio() {
         return desafio;
     }
 
-    public void setIdDesafio(Integer idDesafio) {
+    public void setIdDesafio(Long idDesafio) {
         this.desafio = idDesafio;
     }
 

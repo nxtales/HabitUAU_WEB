@@ -31,7 +31,7 @@ public class TarefaResource {
     private ClienteRepository clienteRepository;
 
     private final String VISION_ENDPOINT = "https://habituauimageanalyzer.cognitiveservices.azure.com/";
-    private final String VISION_API_KEY = "Bs120Koy6F0QZu1Tj43DFNHms0xVWDHm4ZHQ01ia16bmAx5ImYwrJQQJ99AKACYeBjFXJ3w3AAAFACOGYSxT";
+    private final String VISION_API_KEY = "BGiNzKbpzwEpZIEAFynYtHgBbmsQeDKNC9oGr6RJcE0nSY8IWzGBJQQJ99AKACYeBjFXJ3w3AAAFACOGmlnf";
 
     // Endpoint para listar todas as tarefas
     @GetMapping("/all")
@@ -154,28 +154,36 @@ public class TarefaResource {
         RestTemplate restTemplate = new RestTemplate();
         String translatorEndpoint = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0";
 
+        // URL com os parâmetros de idioma
         String url = translatorEndpoint + "&from=" + fromLanguage + "&to=" + toLanguage;
 
+        // Configuração dos cabeçalhos
         org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-        String TRANSLATOR_API_KEY = "56esUPfGGiCXxI3vNel4NbQzAHR76MWZlDxWxRdyJSjAJfJ6BBuoJQQJ99AKACZoyfiXJ3w3AAAbACOGrxd4";
+        String TRANSLATOR_API_KEY = "2aX8LpZbLIZTSexhtyXLt3WRdgxiS3OZ30XBrzPoFzQU0qKsrU1IJQQJ99AKACZoyfiXJ3w3AAAbACOGJdLB";
 		headers.set("Ocp-Apim-Subscription-Key", TRANSLATOR_API_KEY );
         headers.set("Content-Type", "application/json");
+        headers.set("Ocp-Apim-Subscription-Region", "<region>"); // Adicione a região, se necessário
 
+        // Corpo da solicitação
         List<Map<String, String>> body = Collections.singletonList(Collections.singletonMap("Text", text));
         org.springframework.http.HttpEntity<List<Map<String, String>>> requestEntity = new org.springframework.http.HttpEntity<>(body, headers);
 
-        org.springframework.http.ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
-
         try {
+            // Faz a solicitação POST
+            org.springframework.http.ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
+
+            // Processa a resposta
             com.fasterxml.jackson.databind.JsonNode responseBody =
                     new com.fasterxml.jackson.databind.ObjectMapper().readTree(response.getBody());
 
             return responseBody.get(0).get("translations").get(0).get("text").asText();
+
         } catch (Exception e) {
             e.printStackTrace();
-            return text; // Se a tradução falhar, retorna o texto original
+            return text; // Retorna o texto original em caso de falha
         }
     }
+
 
     private List<String> analyzeImage(MultipartFile image) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
