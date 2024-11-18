@@ -5,7 +5,6 @@ import com.habituau.HabitUAU_WEB.model.entity.*;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosTarefasCompletasRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioTarefasRepository;
 import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
-import org.apache.commons.text.similarity.FuzzyScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -119,8 +116,8 @@ public class TarefaResource {
                 return ResponseEntity.badRequest().body("Não foi possível analisar a imagem.");
             }
 
-            boolean isSimilar = isTextSimilar(tarefa.getNome_tarefa(), description);
-            if (!isSimilar) {
+            double similarity = calculateCosineSimilarity(tarefa.getNome_tarefa(), description);
+            if (similarity < 0.5) { // Threshold de similaridade (ajustável conforme necessidade)
                 return ResponseEntity.badRequest().body("A descrição da imagem não é compatível com o nome da tarefa.");
             }
 
@@ -166,11 +163,35 @@ public class TarefaResource {
         return null;
     }
 
-    private boolean isTextSimilar(String text1, String text2) {
-        FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
-        int score = fuzzyScore.fuzzyScore(text1.toLowerCase(), text2.toLowerCase());
-        int maxLength = Math.max(text1.length(), text2.length());
+    private double calculateCosineSimilarity(String text1, String text2) {
+        Map<String, Integer> vector1 = buildWordFrequencyVector(text1);
+        Map<String, Integer> vector2 = buildWordFrequencyVector(text2);
 
-        return (double) score / maxLength > 0.3;
+        Set<String> uniqueWords = new HashSet<>(vector1.keySet());
+        uniqueWords.addAll(vector2.keySet());
+
+        double dotProduct = 0.0;
+        double norm1 = 0.0;
+        double norm2 = 0.0;
+
+        for (String word : uniqueWords) {
+            int count1 = vector1.getOrDefault(word, 0);
+            int count2 = vector2.getOrDefault(word, 0);
+
+            dotProduct += count1 * count2;
+            norm1 += Math.pow(count1, 2);
+            norm2 += Math.pow(count2, 2);
+        }
+
+        return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+    }
+
+    private Map<String, Integer> buildWordFrequencyVector(String text) {
+        Map<String, Integer> frequencyMap = new HashMap<>();
+        String[] words = text.toLowerCase().split("\\W+");
+        for (String word : words) {
+            frequencyMap.put(word, frequencyMap.getOrDefault(word, 0) + 1);
+        }
+        return frequencyMap;
     }
 }
