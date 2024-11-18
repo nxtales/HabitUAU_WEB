@@ -54,7 +54,7 @@ public class DesafioInscritoTarefaCompleta {
 	        return sumPontos;
 	    }
 
-	    public void setSumPontos(int sumPontos) {
-	        this.sumPontos = sumPontos;
+	    public void setSumPontos(int long1) {
+	        this.sumPontos = long1;
 	    }
 	}

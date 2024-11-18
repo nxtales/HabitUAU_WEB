@@ -1,13 +1,20 @@
 package com.habituau.HabitUAU_WEB.api.resource;
 
 import com.habituau.HabitUAU_WEB.api.dto.TarefaDTO;
-import com.habituau.HabitUAU_WEB.model.entity.DesafioTarefa;
+import com.habituau.HabitUAU_WEB.model.entity.*;
+import com.habituau.HabitUAU_WEB.model.repository.DesafioInscritosTarefasCompletasRepository;
 import com.habituau.HabitUAU_WEB.model.repository.DesafioTarefasRepository;
+import com.habituau.HabitUAU_WEB.model.repository.ClienteRepository;
+import org.apache.commons.text.similarity.FuzzyScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,19 +25,27 @@ public class TarefaResource {
     @Autowired
     private DesafioTarefasRepository tarefasRepository;
 
+    @Autowired
+    private DesafioInscritosTarefasCompletasRepository completasRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    private final String VISION_ENDPOINT = "https://habituauimageanalyzer.cognitiveservices.azure.com/";
+    private final String VISION_API_KEY = "Bs120Koy6F0QZu1Tj43DFNHms0xVWDHm4ZHQ01ia16bmAx5ImYwrJQQJ99AKACYeBjFXJ3w3AAAFACOGYSxT";
+
+    // Endpoint para listar todas as tarefas
     @GetMapping("/all")
     public ResponseEntity<List<TarefaDTO>> getAllTarefas() {
-        // Busca todas as tarefas da base de dados
         List<DesafioTarefa> tarefas = tarefasRepository.findAll();
 
-        // Converte as tarefas para o DTO
         List<TarefaDTO> tarefasDTO = tarefas.stream()
                 .map(tarefa -> new TarefaDTO(
                         tarefa.getID(),
                         tarefa.getNome_tarefa(),
                         tarefa.getqtde_pontos(),
-                        false, // Preenche como não completada, já que não há contexto de completude aqui
-                        tarefa.getDesafio() != null ? tarefa.getDesafio().getId() : null // Inclui o ID do desafio
+                        false,
+                        tarefa.getDesafio() != null ? tarefa.getDesafio().getId() : null
                 ))
                 .collect(Collectors.toList());
 
@@ -50,15 +65,13 @@ public class TarefaResource {
         tarefa.setNome_tarefa(tarefaDTO.getNome());
         tarefa.setqtde_pontos(tarefaDTO.getQtdepontos());
 
-        // Salva as alterações
         DesafioTarefa updatedTarefa = tarefasRepository.save(tarefa);
 
-        // Converte para DTO e retorna
         TarefaDTO updatedTarefaDTO = new TarefaDTO(
                 updatedTarefa.getID(),
                 updatedTarefa.getNome_tarefa(),
                 updatedTarefa.getqtde_pontos(),
-                false, // Completude permanece false
+                false,
                 updatedTarefa.getDesafio() != null ? updatedTarefa.getDesafio().getId() : null
         );
 
@@ -74,9 +87,90 @@ public class TarefaResource {
             return ResponseEntity.notFound().build();
         }
 
-        // Deleta a tarefa
         tarefasRepository.deleteById(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    // Endpoint para validar e registrar tarefa como completa
+    @PostMapping("/validateAndComplete")
+    public ResponseEntity<?> validateAndCompleteTarefa(
+            @RequestParam Long tarefaId,
+            @RequestParam String cpfCliente,
+            @RequestParam MultipartFile image
+    ) {
+        Optional<DesafioTarefa> tarefaOpt = tarefasRepository.findById(tarefaId);
+        if (tarefaOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Tarefa não encontrada para o ID fornecido.");
+        }
+
+        DesafioTarefa tarefa = tarefaOpt.get();
+
+        Optional<Cliente> clienteOpt = clienteRepository.findByCPF(cpfCliente);
+        if (clienteOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Cliente não encontrado para o CPF fornecido.");
+        }
+
+        Cliente cliente = clienteOpt.get();
+
+        try {
+            String description = analyzeImage(image);
+            if (description == null) {
+                return ResponseEntity.badRequest().body("Não foi possível analisar a imagem.");
+            }
+
+            boolean isSimilar = isTextSimilar(tarefa.getNome_tarefa(), description);
+            if (!isSimilar) {
+                return ResponseEntity.badRequest().body("A descrição da imagem não é compatível com o nome da tarefa.");
+            }
+
+            // Registrar a tarefa como concluída
+            DesafioInscritoTarefaCompleta tarefaCompleta = new DesafioInscritoTarefaCompleta();
+            tarefaCompleta.setCliente(cliente);
+            tarefaCompleta.setTarefa(tarefa);
+            tarefaCompleta.setDesafio(tarefa.getDesafio());
+            tarefaCompleta.setSumPontos(tarefa.getqtde_pontos().intValue());
+
+            completasRepository.save(tarefaCompleta);
+
+            return ResponseEntity.ok("Tarefa completada com sucesso!");
+
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Erro ao processar a imagem: " + e.getMessage());
+        }
+    }
+
+    private String analyzeImage(MultipartFile image) throws IOException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String visionApiUrl = VISION_ENDPOINT + "vision/v3.2/analyze?visualFeatures=Description";
+
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.set("Ocp-Apim-Subscription-Key", VISION_API_KEY);
+        headers.set("Content-Type", "application/octet-stream");
+
+        byte[] imageBytes = image.getBytes();
+
+        org.springframework.http.HttpEntity<byte[]> requestEntity = new org.springframework.http.HttpEntity<>(imageBytes, headers);
+
+        org.springframework.http.ResponseEntity<String> response = restTemplate.postForEntity(visionApiUrl, requestEntity, String.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            com.fasterxml.jackson.databind.JsonNode responseBody =
+                    new com.fasterxml.jackson.databind.ObjectMapper().readTree(response.getBody());
+
+            if (responseBody.has("description") && responseBody.get("description").has("captions")) {
+                return responseBody.get("description").get("captions").get(0).get("text").asText();
+            }
+        }
+        return null;
+    }
+
+    private boolean isTextSimilar(String text1, String text2) {
+        FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
+        int score = fuzzyScore.fuzzyScore(text1.toLowerCase(), text2.toLowerCase());
+        int maxLength = Math.max(text1.length(), text2.length());
+
+        return (double) score / maxLength > 0.3;
     }
 }
