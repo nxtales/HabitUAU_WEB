@@ -49,46 +49,6 @@ public class TarefaResource {
         return ResponseEntity.ok(tarefasDTO);
     }
 
-    // Endpoint para editar uma tarefa existente
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<TarefaDTO> editTarefa(@PathVariable Long id, @RequestBody TarefaDTO tarefaDTO) {
-        Optional<DesafioTarefa> tarefaOpt = tarefasRepository.findById(id);
-
-        if (tarefaOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        DesafioTarefa tarefa = tarefaOpt.get();
-        tarefa.setNome_tarefa(tarefaDTO.getNome());
-        tarefa.setqtde_pontos(tarefaDTO.getQtdepontos());
-
-        DesafioTarefa updatedTarefa = tarefasRepository.save(tarefa);
-
-        TarefaDTO updatedTarefaDTO = new TarefaDTO(
-                updatedTarefa.getID(),
-                updatedTarefa.getNome_tarefa(),
-                updatedTarefa.getqtde_pontos(),
-                false,
-                updatedTarefa.getDesafio() != null ? updatedTarefa.getDesafio().getId() : null
-        );
-
-        return ResponseEntity.ok(updatedTarefaDTO);
-    }
-
-    // Endpoint para deletar uma tarefa
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteTarefa(@PathVariable Long id) {
-        Optional<DesafioTarefa> tarefaOpt = tarefasRepository.findById(id);
-
-        if (tarefaOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        tarefasRepository.deleteById(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
     // Endpoint para validar e registrar tarefa como completa
     @PostMapping("/validateAndComplete")
     public ResponseEntity<?> validateAndCompleteTarefa(
@@ -111,14 +71,19 @@ public class TarefaResource {
         Cliente cliente = clienteOpt.get();
 
         try {
-            String description = analyzeImage(image);
-            if (description == null) {
+            List<String> descriptions = analyzeImage(image);
+            if (descriptions.isEmpty()) {
                 return ResponseEntity.badRequest().body("Não foi possível analisar a imagem.");
             }
 
-            double similarity = calculateCosineSimilarity(tarefa.getNome_tarefa(), description);
-            if (similarity < 0.5) { // Threshold de similaridade (ajustável conforme necessidade)
-                return ResponseEntity.badRequest().body("A descrição da imagem não é compatível com o nome da tarefa.");
+            // Imprime todas as descrições recebidas
+            System.out.println("Descrições retornadas pela Azure Vision: " + descriptions);
+
+            boolean isSimilar = descriptions.stream()
+                    .anyMatch(description -> isTextSimilar(tarefa.getNome_tarefa(), description));
+
+            if (!isSimilar) {
+                return ResponseEntity.badRequest().body("A descrição da imagem não é compatível com o nome da tarefa. Descrições retornadas: " + descriptions);
             }
 
             // Registrar a tarefa como concluída
@@ -130,14 +95,14 @@ public class TarefaResource {
 
             completasRepository.save(tarefaCompleta);
 
-            return ResponseEntity.ok("Tarefa completada com sucesso!");
+            return ResponseEntity.ok("Tarefa completada com sucesso! Descrições analisadas: " + descriptions);
 
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Erro ao processar a imagem: " + e.getMessage());
         }
     }
 
-    private String analyzeImage(MultipartFile image) throws IOException {
+    private List<String> analyzeImage(MultipartFile image) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
 
         String visionApiUrl = VISION_ENDPOINT + "vision/v3.2/analyze?visualFeatures=Description";
@@ -157,13 +122,14 @@ public class TarefaResource {
                     new com.fasterxml.jackson.databind.ObjectMapper().readTree(response.getBody());
 
             if (responseBody.has("description") && responseBody.get("description").has("captions")) {
-                return responseBody.get("description").get("captions").get(0).get("text").asText();
+                return responseBody.get("description").get("captions")
+                        .findValuesAsText("text");
             }
         }
-        return null;
+        return Collections.emptyList();
     }
 
-    private double calculateCosineSimilarity(String text1, String text2) {
+    private boolean isTextSimilar(String text1, String text2) {
         Map<String, Integer> vector1 = buildWordFrequencyVector(text1);
         Map<String, Integer> vector2 = buildWordFrequencyVector(text2);
 
@@ -183,7 +149,8 @@ public class TarefaResource {
             norm2 += Math.pow(count2, 2);
         }
 
-        return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+        double similarity = dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+        return similarity > 0.3; // Threshold de similaridade ajustável
     }
 
     private Map<String, Integer> buildWordFrequencyVector(String text) {
