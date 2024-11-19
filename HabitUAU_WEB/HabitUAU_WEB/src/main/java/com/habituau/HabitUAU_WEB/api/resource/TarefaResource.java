@@ -94,13 +94,13 @@ public class TarefaResource {
         return ResponseEntity.noContent().build();
     }
     
-    // Endpoint para validar e registrar tarefa como completa
     @PostMapping("/validateAndComplete")
     public ResponseEntity<?> validateAndCompleteTarefa(
             @RequestParam Long tarefaId,
             @RequestParam String cpfCliente,
             @RequestParam MultipartFile image
     ) {
+        // Verifica se a tarefa existe
         Optional<DesafioTarefa> tarefaOpt = tarefasRepository.findById(tarefaId);
         if (tarefaOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Tarefa não encontrada para o ID fornecido.");
@@ -108,23 +108,30 @@ public class TarefaResource {
 
         DesafioTarefa tarefa = tarefaOpt.get();
 
+        // Verifica se o cliente existe
         Optional<Cliente> clienteOpt = clienteRepository.findByCPF(cpfCliente);
         if (clienteOpt.isEmpty()) {
+            System.out.println("Cliente não encontrado para o CPF: " + cpfCliente);
             return ResponseEntity.badRequest().body("Cliente não encontrado para o CPF fornecido.");
         }
 
         Cliente cliente = clienteOpt.get();
+        System.out.println("Cliente carregado: Nome - " + cliente.getNome() + ", CPF - " + cliente.getCpf());
 
         try {
+            // Analisa a imagem
             List<String> descriptions = analyzeImage(image);
             if (descriptions.isEmpty()) {
                 return ResponseEntity.badRequest().body("Não foi possível analisar a imagem.");
             }
 
-            // Traduz o nome da tarefa para inglês (se necessário)
-            String translatedTaskName = translateText(tarefa.getNome_tarefa(), "pt", "en");
+            System.out.println("Descrições retornadas pela análise de imagem: " + descriptions);
 
-            // Verifica se alguma descrição é compatível usando similaridade de cosseno
+            // Traduz o nome da tarefa para inglês
+            String translatedTaskName = translateText(tarefa.getNome_tarefa(), "pt", "en");
+            System.out.println("Nome da tarefa traduzido para inglês: " + translatedTaskName);
+
+            // Verifica similaridade contextual
             boolean isSimilar = descriptions.stream()
                     .anyMatch(description -> isContextuallySimilar(translatedTaskName, description));
 
@@ -136,10 +143,14 @@ public class TarefaResource {
 
             // Registrar a tarefa como concluída
             DesafioInscritoTarefaCompleta tarefaCompleta = new DesafioInscritoTarefaCompleta();
-            tarefaCompleta.setCliente(cliente);
+            tarefaCompleta.setCliente(cliente); // Associa o cliente, que inclui o CPF
             tarefaCompleta.setTarefa(tarefa);
             tarefaCompleta.setDesafio(tarefa.getDesafio());
             tarefaCompleta.setSumPontos(tarefa.getqtde_pontos().intValue());
+
+            System.out.println("Registrando tarefa completa: Cliente CPF - " + cliente.getCpf() +
+                    ", Tarefa ID - " + tarefa.getID() +
+                    ", Desafio ID - " + (tarefa.getDesafio() != null ? tarefa.getDesafio().getId() : "N/A"));
 
             completasRepository.save(tarefaCompleta);
 
@@ -149,6 +160,7 @@ public class TarefaResource {
             return ResponseEntity.status(500).body("Erro ao processar a imagem: " + e.getMessage());
         }
     }
+
 
     private String translateText(String text, String fromLanguage, String toLanguage) {
         RestTemplate restTemplate = new RestTemplate();
@@ -217,7 +229,7 @@ public class TarefaResource {
         Map<CharSequence, Integer> vector2 = toFrequencyMap(text2.toLowerCase());
 
         Double similarity = cosineSimilarity.cosineSimilarity(vector1, vector2);
-        return similarity != null && similarity > 0.3; // Ajuste o limite de similaridade conforme necessário
+        return similarity != null && similarity > 0.7; // Ajuste o limite de similaridade conforme necessário
     }
 
     private Map<CharSequence, Integer> toFrequencyMap(String text) {
